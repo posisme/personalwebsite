@@ -1,0 +1,65 @@
+<%- include("../partials/head") %>
+    <title>Admin Dashboard</title>
+    <style>
+        table{
+            width:100%
+        }
+        th{
+        padding: 2px;
+    border: 1px solid black;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.2em;
+        }
+        td{
+            padding: 2px;
+    border: 1px solid black;
+    text-align: left;
+    font-size: 1em;
+        }
+    </style>
+    </head>
+
+    <body>
+        <%- include("../partials/header") %>
+            <h2>Hello Admin <%- name.displayName %></h2>
+<h3>Latest Messages</h3>
+<table><tr><th>Name</th><th>Email</th><th>Message</th><th>&nbsp;</th></tr>
+<% comments.forEach(function(l){ %>
+    <tr id="<%= l.id %>">
+        <td><%= l.name %></td>
+        <td><%= l.email %></td>
+        <td><%= l.message %></td>
+        <td><button class='remove' value="<%= l.id %>">Remove</button></td>
+    </tr>
+<%}) %>
+</table>
+<script>
+    $(".remove").click(function(e){
+        var event = event || e;
+        var id = $(event.target).val();
+        $.ajax({
+            "url":"/api/rmmsg",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify({
+                "id":id
+            }),
+            success: function (d) {
+                $("#"+id).remove()
+            },
+            error: function (err) {
+                console.log(err);
+            }
+
+        })
+    })
+</script>
+            </div>
+            <%- include("../partials/footer") %>
+    </body>
+
+    </html>

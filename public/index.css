@@ -1,0 +1,110 @@
+
+
+body {
+    background-color: rgb(10, 27, 48);
+    font-family: 'Inter', sans-serif;
+
+}
+
+
+h1.mainhead{
+    font-family: "Alkalami", sans-serif;
+        font-size: 4em;
+        font-weight: bold;
+        color: rgb(10, 27, 48);
+        text-align: center;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: 1em;
+        padding-bottom: 0;
+
+}
+h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.67em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    color: rgb(10, 27, 48);
+}
+p{
+    font-size:1em;
+    color:rgb(10, 27, 48);
+    padding-top:1em;
+    line-height: 1.2em;
+}
+a{
+    color:inherit;
+}
+.nav{
+    padding-top: 2em;
+}
+.nav .navitem{
+display: inline-block;
+    margin: 5px;
+    font-size: 1.5em;
+    font-weight: 400;
+    background-color: rgb(10, 27, 48);
+    color: rgb(177, 239, 248);
+    padding: 0.25em;
+    border-radius: 15px;
+    padding-left: 2em;
+    padding-right: 2em;
+    box-shadow: inset 0.2em 0.2em 0.2em 0 rgba(177, 239, 248, 0.5), inset -0.2em -0.2em 0.2em 0 rgba(0, 0, 0, 0.5);
+}
+.nav .navitem a{
+    color: rgb(177, 239, 248);
+    text-decoration: none;
+}
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 14px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+    border-radius: 6px;
+    border: none;
+
+    background: #6E6D70;
+    box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12);
+    color: #DFDEDF;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin: 1em;
+}
+.footer p{
+    color:rgb(177,239,248);
+    text-align: center;
+}
+.textimgcontainer{
+    position:relative;
+    text-align: left;
+    padding:2px;
+    margin:2px;
+}
+
+@media screen {
+    .wrap {
+        width: 80%;
+        height: 100em;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 0px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        background-color: rgb(177, 239, 248);
+    }
+}
+
+/*phone*/
+@media screen and (max-width:480px) {
+    .wrap {
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(177, 239, 248);
+    }
+}
