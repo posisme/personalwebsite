@@ -99,8 +99,8 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
     var http = require('http');
     var https = require('https');
-    var privateKey = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/privkey.pem");
-    var certificate = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/cert.pem");
+    var privateKey = fs.readFileSync("/var/www/personalwebsite/privkey.pem");
+    var certificate = fs.readFileSync("/var/www/personalwebsite/cert.pem");
     var credentials = {key: privateKey,cert:certificate};
     var httpServer = http.createServer(app);
     var httpsServer = https.createServer(credentials,app);
