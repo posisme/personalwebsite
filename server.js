@@ -74,8 +74,21 @@ app.post("/api/msg", async (req,res) => {
     //res.render('pages/msgthanks',{"rep":req.body});
 })
 
-const PORT = process.env.PORT || 8000;
+//uncomment if you port to google cloud
+// const PORT = process.env["PORT"] || 8000;
 
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}...`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server listening on port ${PORT}...`);
+// });
+
+//for hosting on my machine
+var http = require('http');
+var https = require('https');
+var privateKey = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/privkey.pem");
+var certificate = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/cert.pem");
+var credentials = {key: privateKey,cert:certificate};
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials,app);
+httpServer.listen(80);
+httpsServer.listen(443);
+
