@@ -57,19 +57,26 @@ app.get("*",function (req, res) {
 })
 
 app.post("/api/msg", async (req,res) => {
-    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
+    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE, (err) => {
         if(err){
             console.error(err.message);
         }
         console.log("Connected to db");
     })
-    db.run(`INSERT INTO messages(id,name,email,message) VALUES(?,?,?,?)`,[uuidv4(),req.body.name,req.body.email,req.body.message],function(err){
+    db.run(`CREATE TABLE IF NOT EXISTS messages(id,name,email,message)`,function(err){
         if(err){
-            res.sendStatus(500)
+            res.sendStatus(500);
             return console.log(err.message);
         }
-        res.sendStatus(200);
+        db.run(`INSERT INTO messages(id,name,email,message) VALUES(?,?,?,?)`, [uuidv4(), req.body.name, req.body.email, req.body.message], function (err) {
+            if (err) {
+                res.sendStatus(500)
+                return console.log(err.message);
+            }
+            res.sendStatus(200);
+        })
     })
+    
     db.close();
     //res.render('pages/msgthanks',{"rep":req.body});
 })
@@ -82,17 +89,27 @@ app.post("/api/msg", async (req,res) => {
 // });
 
 //for hosting on my machine
-var http = require('http');
-var https = require('https');
-var privateKey = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/privkey.pem");
-var certificate = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/cert.pem");
-var credentials = {key: privateKey,cert:certificate};
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials,app);
-httpServer.listen(80, () => {
-    console.log('running on port 80...')
-});
-httpsServer.listen(443, () => {
-    console.log('running on port 443...')
-});
+if (process.env.NODE_ENV === 'development') {
+    app.listen(3000, () => {
+        console.log('running on port 3000 for dev...');
+    });
+}
+if (process.env.NODE_ENV === 'production') {
+    var http = require('http');
+    var https = require('https');
+    var privateKey = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/privkey.pem");
+    var certificate = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/cert.pem");
+    var credentials = {key: privateKey,cert:certificate};
+    var httpServer = http.createServer(app);
+    var httpsServer = https.createServer(credentials,app);
+
+
+    httpServer.listen(80, () => {
+        console.log('running on port 80 for prod...')
+    });
+    httpsServer.listen(443, () => {
+        console.log('running on port 443 for prod...')
+    });
+}
+
 
