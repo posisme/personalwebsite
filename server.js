@@ -57,7 +57,7 @@ app.get("*",function (req, res) {
 })
 
 app.post("/api/msg", async (req,res) => {
-    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE, (err) => {
+    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
         if(err){
             console.error(err.message);
         }
