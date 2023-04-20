@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
 const bodyParser = require('body-parser');
+const sqlite3 = require('sqlite3').verbose();
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -10,6 +11,9 @@ const dashboard = require('./dashboard')
 app.use(express.json());
 
 const session = require('express-session');
+const sqlitestore = require('better-sqlite3');
+const SqliteStore = require("better-sqlite3-session-store")(session);
+const dbss = new sqlitestore("./db/sess.db",{verbose:console.log});
 
 const passport = require('passport')
 
@@ -21,6 +25,13 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 3600000 },
+    store: new SqliteStore({
+        client:dbss,
+        expired:{
+            clear:true,
+            intervalMs:900000
+        }
+    })
     
 }))
 
