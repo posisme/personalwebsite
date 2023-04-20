@@ -129,7 +129,12 @@ app.get('/auth/google/callback',
 
 //Define the Login Route
 app.get("/login", (req, res) => {
-    res.render("pages/login",{returnTo:req.query.returnTo})
+    if(req.secure){
+        res.render("pages/login",{returnTo:req.query.returnTo})
+    }
+    else{
+        res.redirect("https://"+req.header('host')+"/login")
+    }
 })
 
 
