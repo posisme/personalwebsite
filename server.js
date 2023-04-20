@@ -57,7 +57,7 @@ app.get("*",function (req, res) {
 })
 
 app.post("/api/msg", async (req,res) => {
-    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE, (err) => {
+    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
         if(err){
             console.error(err.message);
         }
@@ -89,6 +89,10 @@ var certificate = fs.readFileSync("/etc/letsencrypt/live/www.posis.me/cert.pem")
 var credentials = {key: privateKey,cert:certificate};
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials,app);
-httpServer.listen(80);
-httpsServer.listen(443);
+httpServer.listen(80, () => {
+    console.log('running on port 80...')
+});
+httpsServer.listen(443, () => {
+    console.log('running on port 443...')
+});
 
