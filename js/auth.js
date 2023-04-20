@@ -13,7 +13,12 @@ app.use(express.json());
 const session = require('express-session');
 const sqlitestore = require('better-sqlite3');
 const SqliteStore = require("better-sqlite3-session-store")(session);
-const dbss = new sqlitestore("./db/sess.db",{verbose:console.log});
+var sessargs = {};
+if (process.env.NODE_ENV === 'development') {
+    sessargs = {verbose:console.log};
+}
+const dbss = new sqlitestore("./db/sess.db",sessargs);
+
 
 const passport = require('passport')
 
