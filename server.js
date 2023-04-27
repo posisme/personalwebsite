@@ -7,8 +7,10 @@ const { isReadable } = require("stream");
 const { v4: uuidv4 } = require('uuid');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const api = require('./js/api');
 
-const auth = require('./js/auth.js');
+const auth = require('./js/auth');
+const blog = require("./js/blog");
 
 app.set('view engine','ejs');
 app.set("views",path.join(__dirname,"views"))
@@ -16,6 +18,8 @@ app.use(express.static(path.join(__dirname,"public")))
 app.use(express.json());
 
 app.use('/',auth);
+app.use('/',api);
+app.use('/',blog);
 
 app.get("/",function (req, res) {
     console.log(req.route.path)
@@ -58,30 +62,7 @@ app.get("*",function (req, res) {
     })
 })
 
-app.post("/api/msg", async (req,res) => {
-    let db = new sqlite3.Database('./db/msg.sqlite', sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-        if(err){
-            console.error(err.message);
-        }
-        console.log("Connected to db");
-    })
-    db.run(`CREATE TABLE IF NOT EXISTS messages(id,name,email,message)`,function(err){
-        if(err){
-            res.sendStatus(500);
-            return console.log(err.message);
-        }
-        db.run(`INSERT INTO messages(id,name,email,message) VALUES(?,?,?,?)`, [uuidv4(), req.body.name, req.body.email, req.body.message], function (err) {
-            if (err) {
-                res.sendStatus(500)
-                return console.log(err.message);
-            }
-            res.sendStatus(200);
-        })
-    })
-    
-    db.close();
-    //res.render('pages/msgthanks',{"rep":req.body});
-})
+
 
 //uncomment if you port to google cloud
 // const PORT = process.env["PORT"] || 8000;
@@ -96,7 +77,7 @@ if (process.env.NODE_ENV === 'development') {
         console.log('running on port 3000 for dev...');
     });
 }
-if (process.env.NODE_ENV === 'production') {
+else if (process.env.NODE_ENV === 'production') {
     var http = require('http');
     var https = require('https');
     var privateKey = fs.readFileSync("/var/www/personalwebsite/privkey.pem");
@@ -113,5 +94,7 @@ if (process.env.NODE_ENV === 'production') {
         console.log('running on port 443 for prod...')
     });
 }
-
+else{
+    console.log("No NODE_ENV set, server is not running...")
+}
 

@@ -14,7 +14,7 @@ const session = require('express-session');
 const sqlitestore = require('better-sqlite3');
 const SqliteStore = require("better-sqlite3-session-store")(session);
 var sessargs = {};
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && process.env.LOG_LEVEL=='debug') {
     sessargs = {verbose:console.log};
 }
 const dbss = new sqlitestore("./db/sess.db",sessargs);
@@ -133,7 +133,12 @@ app.get("/login", (req, res) => {
         res.render("pages/login",{returnTo:req.query.returnTo})
     }
     else{
-        res.redirect("https://"+req.header('host')+"/login")
+        if(process.env.NODE_ENV == "production"){
+            res.redirect("https://"+req.header('host')+"/login")
+        }
+        else if(process.env.NODE_ENV == "development"){
+            res.render("pages/login",{returnTo:req.query.returnTo})
+        }
     }
 })
 

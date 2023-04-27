@@ -39,6 +39,7 @@ p{
 a{
     color:inherit;
 }
+
 .nav{
     padding-top: 2em;
 }
@@ -90,13 +91,17 @@ display: inline-block;
 @media screen {
     .wrap {
         width: 80%;
-        height: 100em;
+        /*height: 100em;*/
         padding-left: 15px;
         padding-right: 15px;
         padding-top: 0px;
         margin: 0 auto;
         box-sizing: border-box;
         background-color: rgb(177, 239, 248);
+    }
+    iframe.videoplayer{
+        width:1120px; 
+        height:630px;
     }
 }
 
@@ -106,5 +111,9 @@ display: inline-block;
         width: 100%;
         box-sizing: border-box;
         background-color: rgb(177, 239, 248);
+    }
+    iframe.videoplayer{
+        transform: scale(.4);
+        transform-origin: 0 0;
     }
 }

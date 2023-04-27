@@ -4,24 +4,38 @@
 </head>
 <body>
 <style>
+@media screen and (min-width:481px){
     .textimgcontainer .floattext{
-    position: absolute;
+        position: absolute;
         top: 8px;
         width: 80%;
         left: 10%;
         right: 10%;
         background-color: rgb(10, 27, 48, .5);
         padding: 3px;
+    }
+    .textimgcontainer .floattext p{
+        color: rgb(177, 239, 248);
+        font-size:2em;
+    }
+    .textimgcontainer img{
+        width: 100%;
+    }
 }
-.textimgcontainer .floattext p{
-    color: rgb(177, 239, 248);
-    font-size:2em;
+@media screen and (max-width:480px) {
+    .textimgcontainer .floattext{
+        background-color: rgb(10, 27, 48, .5);
+    
+    }
+    .textimgcontainer .floattext p{
+        color: rgb(177, 239, 248);
+        font-size:1.2em;
+    }
+    .textimgcontainer img{
+        width: 100%;
+    }
 }
-.textimgcontainer img{
-    width: 100%;
 
-
-}
 </style>
 <%- include("../partials/header") %>
         

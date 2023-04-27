@@ -1,2 +1,3 @@
 /db/msg.sqlite
-/db/sess.sqlite
+/db/sess.db
+/db/writing.sqlite
