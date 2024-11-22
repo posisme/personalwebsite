@@ -7,7 +7,11 @@ const { isReadable } = require("stream");
 const { v4: uuidv4 } = require('uuid');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
+const basepicdir = "pictures/mount-pics/nfs"
 const api = require('./js/api');
+//const imgpred = require('./js/readpic');
+const ExifImage = require('exif').ExifImage;
+
 
 const auth = require('./js/auth');
 const blog = require("./js/blog");
@@ -15,6 +19,7 @@ const blog = require("./js/blog");
 app.set('view engine','ejs');
 app.set("views",path.join(__dirname,"views"))
 app.use(express.static(path.join(__dirname,"public")))
+app.use(express.static(path.join(__dirname, basepicdir)));
 app.use(express.json());
 
 app.use('/',auth);
@@ -37,7 +42,7 @@ checkAuthenticated = (req, res, next) => {
 }
 
 app.get("/about",checkAuthenticated,function(req,res){
-    console.log(res.locals.auth);
+    console.log("Admin?"+res.locals.auth);
     var loggedIn = false;
     var name = { "email": "", "name": "", "displayName": "" };
     if(res.locals.auth){
@@ -49,7 +54,61 @@ app.get("/about",checkAuthenticated,function(req,res){
     res.render('pages/about', { name:name,loggedIn:loggedIn })
 })
 
-
+app.get("/random", checkAuthenticated,(req, res) => {
+    if(res.locals.auth){
+        var list = fs.readdirSync(basepicdir)
+    var pic = list[Math.floor(Math.random() * (list.length - 0) + 0)];
+    var meta = new ExifImage({ image: basepicdir + "/" + pic }, function (err, exifData) {
+        if (err){
+            console.log(err);
+            res.redirect("/random")
+        }
+        else
+            res.render("pages/pic", { img: pic, meta: exifData });
+    })
+    }
+    else{
+        res.redirect("/login")
+    }
+})
+app.get("/pic", checkAuthenticated,(req, res) => {
+    if(res.locals.auth){
+    //var p = imgpred.predictImage(basepicdir + "/" + req.query.pic);
+    //console.log(p)
+    var meta = new ExifImage({ image: basepicdir + "/" + req.query.pic }, function (err, exifData) {
+        if (err){
+            console.log(err);
+            res.render("pages/pic", { img: req.query.pic, meta: { exif: { DateTimeOriginal: "unknown" } } })
+        }
+        else{
+            res.render("pages/pic", { img: req.query.pic, meta: exifData });
+        }
+        
+    })}
+    else{
+        res.redirect("/login")
+    }
+})
+app.get("/pictures",checkAuthenticated,(req,res)=>{
+    var list = fs.readdirSync(basepicdir)
+    var last = list.map((f)=>{
+        return {
+            name:f,
+            time:fs.statSync(basepicdir + "/"+ f).mtime.getTime(),
+            type: f.split(/\./).pop()
+        }
+    })
+    last = last.sort((a,b)=>{if(a.time < b.time) return 1; else return -1; return 1;})
+    if(res.locals.auth){
+        if (list)
+            res.render("pages/picslist", { files: list, path: req.query.folder, last:last });
+        else
+            res.render("pages/pic404");
+    }
+    else {
+        res.redirect("/login")
+    }
+})
 app.get("*",function (req, res) {
     fs.readFile('./views/pages' + req.originalUrl+".ejs",(err,data)=>{
         if(!err){
@@ -80,8 +139,8 @@ if (process.env.NODE_ENV === 'development') {
 else if (process.env.NODE_ENV === 'production') {
     var http = require('http');
     var https = require('https');
-    var privateKey = fs.readFileSync("/var/www/personalwebsite/privkey.pem");
-    var certificate = fs.readFileSync("/var/www/personalwebsite/cert.pem");
+    var certificate = fs.readFileSync("/etc/letsencrypt/live/posis.me/fullchain.pem");
+    var privateKey = fs.readFileSync("/etc/letsencrypt/live/posis.me/privkey.pem");
     var credentials = {key: privateKey,cert:certificate};
     var httpServer = http.createServer(app);
     var httpsServer = https.createServer(credentials,app);
@@ -95,6 +154,8 @@ else if (process.env.NODE_ENV === 'production') {
     });
 }
 else{
-    console.log("No NODE_ENV set, server is not running...")
+    app.listen(3000, () => {
+        console.log('running on port 3000...');
+    });
 }
 

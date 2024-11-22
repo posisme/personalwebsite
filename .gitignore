@@ -1,3 +1,5 @@
 /db/msg.sqlite
 /db/sess.db
 /db/writing.sqlite
+node_modules
+pictures

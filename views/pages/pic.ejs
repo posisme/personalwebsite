@@ -1,0 +1,165 @@
+<%- include("../partials/head") %>
+<title><%= img %></title>
+        <style>
+            .body{
+                color:black;
+            }
+            .btn{
+                border:1px solid black;
+                border-radius: 25%;
+                padding:5px;
+                background-color: grey;
+                color:white;
+            }
+            #picture{
+                display:flex;
+                justify-content: center;
+                align-items:center;
+                height:80vh;
+            }
+            #picture img{
+                max-height: 80vh;
+            }
+            #bigimage{
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                background: rgba(51,51,51,0.7);
+                justify-content:center;
+                align-items:center;
+                display:flex;
+                z-index: 10;
+            }
+            #bigimage img{
+                max-height:100%
+            }
+            
+            
+            button{
+        display: inline-block;
+        margin: 2px;
+        font-size: 1em;
+        font-weight: 400;
+        background-color: rgb(10, 27, 48);
+        color: rgb(177, 239, 248);
+        padding: 0.25em;
+        border-radius: 15px;
+        padding-left: 2em;
+        padding-right: 2em;
+        box-shadow: inset 0.2em 0.2em 0.2em 0 rgba(177, 239, 248, 0.5), inset -0.2em -0.2em 0.2em 0 rgba(0, 0, 0, 0.5);
+}
+        </style>
+    </head>
+    <body>
+        <%- include("../partials/header") %>
+        <div id="subnavigation">
+            <ul>
+            
+            </ul>
+        </div>
+        <ul id="info">
+            <li><label for='name'>Name:</label> <input type='text' id='name' name='name' value='<%= img %>' /></li>
+            <li>Date: <%= meta.exif.DateTimeOriginal %>
+            </li>
+            <li>Link: <a href='/pic?pic=<%= img %>'>
+                    <%= img %>
+                </a></li>
+        </ul>
+        <pre style='display:none' id="meta"><%= JSON.stringify(meta,null,3) %></pre>
+        <button id="delete">Delete</button> <button id="rename">Rename</button>
+        <button><a href="/random">Random</a></button>
+        <div id="picture">
+            <img src="<%= img %>" />
+            
+        </div>
+        
+        
+        <script>
+            var scrollsize = 1;
+            $(function(){
+                $("#delete").click(delme);
+                $("#rename").click(rename);
+                $("#picture img").click(fullsize);
+                
+                
+                
+            })
+            function fullsize(e){
+                if($("#bigimage").length > 0){
+                    $("#bigimage").remove();
+                    scrollsize = 0;
+                }
+                else{
+                    $("body").append($("<div id='bigimage'></div>")
+                        .append("<img src='<%= img %>' />")
+                        .bind("mousewheel",scrollbig)
+                        .bind("mousemove",setoriginscrollbig)
+                        .click(fullsize)
+                    )
+                }
+            }
+            var mouselr = [0,0];
+            function setoriginscrollbig(e){
+                mouselr = [e.originalEvent.layerX+"px", e.originalEvent.layerY+"px"];
+            }
+            function scrollbig(e){
+                
+                if(e.originalEvent.wheelDelta / 120 > 0 && scrollsize >=0){
+                    scrollsize++;
+                }
+                else if(scrollsize > 1){
+                    scrollsize--;
+                }
+                $("#bigimage img").css({
+                    "transform":"scale("+ scrollsize +")",
+                    "transform-origin":mouselr.join(" ")}
+                )
+            }
+            function delme(e){
+                var yn = confirm("Are you sure you want to delete this picture?")
+                
+                if(yn == true){
+                    $.ajax({
+                        url:"/api/pics?action=delete",
+                        type:"POST",
+                        data:{dellist:["<%= img %>"]},
+                        success:function(r){
+                            console.log(r);
+                            r.done.forEach(function(d){
+                                window.location = window.location.origin+"/pictures"
+                            })
+                        },
+                        error:function(err){
+                            console.log(err);
+                            alert('error')
+                        }
+                    })
+                }
+                
+            }
+            function rename(e){
+                $.ajax({
+                    url:"/api/pics?action=rename",
+                    type:"POST",
+                    data:{oldname:"<%= img %>",newname:$("#name").val()},
+                    success:function(r){
+                        console.log(r);
+                        if(r.error){
+                            alert(r.error)
+                        }
+                        else{
+                            window.location = window.location.origin+"/pic?pic="+$("#name").val();
+                        }
+                    },
+                    error:function(err){
+                        console.log(err);
+                        alert('error')
+                    }
+                })
+            }
+        </script>
+        <%- include("../partials/footer") %>
+    </body>
+</html>
