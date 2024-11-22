@@ -129,6 +129,7 @@ app.get('/auth/google/callback',
 
 //Define the Login Route
 app.get("/login", (req, res) => {
+    console.log(process.env.NODE_ENV)
     if(req.secure){
         res.render("pages/login",{returnTo:req.query.returnTo})
     }

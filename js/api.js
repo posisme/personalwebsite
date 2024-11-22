@@ -1,8 +1,12 @@
 const express = require('express')
 const app = express();
+const fs = require('fs');
+const basepicdir = "pictures/mount-pics/nfs"
+
 const sqlite3 = require('sqlite3').verbose();
 const { v4: uuidv4 } = require('uuid');
 const bodyParser = require('body-parser');
+const { disable } = require('./api');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -31,6 +35,33 @@ app.post("/api/msg", async (req, res) => {
 
     db.close();
     //res.render('pages/msgthanks',{"rep":req.body});
+})
+app.post("/api/pics",async(req,res)=>{
+    
+    if(req.query.action == "delete"){
+        
+        req.body.dellist.forEach(function(l){
+            console.log(basepicdir +"/"+l)
+            fs.rename(basepicdir + "/" + l, basepicdir +"/archive/"+l, function(){
+                
+            })
+        })
+        res.json({done:req.body.dellist});
+    }
+    else if(req.query.action == "rename"){
+        if(fs.existsSync(basepicdir+"/"+req.body.newname)){
+            res.json({error:"filename already exists"})
+        }
+        else{
+            fs.rename(basepicdir+"/"+req.body.oldname, basepicdir+"/"+req.body.newname, function(error){
+			if(error){
+				console.log(error);
+			}
+		})
+            res.json({done:req.body.newname});
+        }
+    }
+    
 })
 
 app.get("/api/getwriting", async(req,res)=>{

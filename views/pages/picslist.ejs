@@ -1,0 +1,58 @@
+<%- include("../partials/head") %>
+<title>Randy's Pictures</title>
+<style>
+    #piclist li{
+        display:inline-block;
+        width:120px;
+        height:100px;
+        overflow:hidden;
+        margin:3px;
+    }
+    .thumbnail{
+        width:100%;
+    }
+    .picsel{
+        color: white;
+        position: relative;
+        top: 17px;
+        width: 15px;
+        left: 2px;
+    }
+    button{
+        display: inline-block;
+        margin: 2px;
+        font-size: 1em;
+        font-weight: 400;
+        background-color: rgb(10, 27, 48);
+        color: rgb(177, 239, 248);
+        padding: 0.25em;
+        border-radius: 15px;
+        padding-left: 2em;
+        padding-right: 2em;
+        box-shadow: inset 0.2em 0.2em 0.2em 0 rgba(177, 239, 248, 0.5), inset -0.2em -0.2em 0.2em 0 rgba(0, 0, 0, 0.5);
+}
+
+</style>
+<script>
+    const allpics = <%- JSON.stringify(files) %>;
+    
+    const last = <%- JSON.stringify(last) %>;
+</script>
+<script src="/js/pictures/index.js"></script>
+</head>
+    <body>
+        <%- include("../partials/header") %>
+        <div id="buttonbar">
+        <button id="loadmore">Load More</button>
+        <button id="delselect">Delete Selected</button>
+        <label for="search">Search:</label><input type="text" id="search" name="search" /> <button id="searchgo">Go</button>
+        </div>
+        <input type="hidden" id="count" value="0" />
+        <ul id="piclist">
+        
+        </ul>
+        
+        
+        <%- include("../partials/footer") %>
+    </body>
+</html>

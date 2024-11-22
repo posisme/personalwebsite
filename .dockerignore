@@ -1,0 +1,6 @@
+node_modules
+pictures
+.git
+.gitignore
+nohup.out
+.env
