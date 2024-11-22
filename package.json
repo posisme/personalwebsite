@@ -13,6 +13,8 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start":"node server.js",
+    "killdev": "lsof -i :${PORT:-3000} -t | xargs kill && NODE_ENV=development npx nodemon server.js",
+    "dev": "NODE_ENV=development npx nodemon server.js"
   }
 }
