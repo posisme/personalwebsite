@@ -7,11 +7,10 @@ services:
    volumes:
     - pictures:/usr/app/pictures
    env_file: .env
-
 volumes:
   pictures:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/randy/personalsite/www/personalwebsite/pictures
+      device: /home/randy/pictures
