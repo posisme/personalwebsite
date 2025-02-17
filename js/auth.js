@@ -56,7 +56,7 @@ authUser = (request, accessToken, refreshToken, profile, done) => {
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/google/callback",
+    callbackURL: "https://posis.me/auth/google/callback",
     passReqToCallback: true
 }, authUser));
 
@@ -129,16 +129,22 @@ app.get('/auth/google/callback',
 
 //Define the Login Route
 app.get("/login", (req, res) => {
-    console.log(process.env.NODE_ENV)
+    
     if(req.secure){
         res.render("pages/login",{returnTo:req.query.returnTo})
     }
     else{
+        console.log(1,req.header('host'));
+        console.log(process.env.NODE_ENV);
         if(process.env.NODE_ENV == "production"){
+            console.log(2,req.header('host'));
             res.redirect("https://"+req.header('host')+"/login")
         }
         else if(process.env.NODE_ENV == "development"){
             res.render("pages/login",{returnTo:req.query.returnTo})
+        }
+        else{
+            console.log(3,"oops");
         }
     }
 })
