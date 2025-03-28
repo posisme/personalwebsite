@@ -1,0 +1,97 @@
+@use "../util" as u;
+.main {
+    
+    margin:0;
+    padding:0;
+
+    &__headshot {
+        width:200px;
+        height:auto;
+        display:block;
+        margin:auto;
+
+        @include u.breakpoint(large){
+            width:350px;
+            margin:0;
+        }
+    }
+    &__wrapper{
+        @include u.breakpoint(large){
+            display:flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+        }
+    }
+    &__heading{
+        padding-left:1rem;
+        font-size:2rem;
+    }
+    &__hometext{
+        padding-left:1rem;
+        font-size:1.2rem;
+
+    }
+    &__picgroup{
+        display:flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+    &__picture{
+        width:100%;
+        height:auto;
+        display:block;
+        object-fit: cover;
+        max-height:100px;
+        
+    }
+    &__pictureoverlay{
+        float:left;
+        position:relative;
+        // left: 0;
+        top:-100px;
+        z-index: 1000;
+        background-color: hsla(0, 0%, 50%, 0.301);
+        padding:5px;
+        font-weight: bold;
+        color:white;
+    }
+    &__picturegroup{
+        width:50%;
+        height:100px;
+        @include u.breakpoint(large){
+            width:20%;
+        }
+        outline:1px solid;
+        position:relative;
+    }
+    &__singlepicture{
+        display:block;
+        width:100%;
+        height:auto;
+    }
+    &__buttongroup{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        
+    }
+    &__videoplayer{
+        display:block;
+        height:30em;
+    }
+}
+button{
+    display:inline-block;
+    background-color: var(--secondary-bg-color);
+    color:var(--secondary-text-color);
+    padding:.75rem;
+    margin:.75rem;
+    border-radius: 5px;
+    font-size:1.2rem;
+}
+.writing__wrapper,.videos__wrapper,.pictures__wrapper{
+    flex-wrap:wrap;
+    flex-direction: column;
+
+}

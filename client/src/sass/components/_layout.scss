@@ -1,0 +1,74 @@
+@use "../util/" as u;
+body {
+    margin:auto;
+    background-color: var(--main-bg-color);
+    
+}
+
+.header{
+    background-color: var(--secondary-bg-color);
+    // font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color:var(--main-text-color);
+    margin-bottom:2rem;
+    margin-top:1rem;
+    &__wrapper{
+        width:0;
+        margin:0;
+        @include u.breakpoint(large){
+            display:flex;
+        }
+    }
+    &__title {
+        margin:0;
+        padding:0;
+        text-align: center;
+        font-size:clamp(2rem,2.2rem,2.5rem);
+        @include u.breakpoint(large){
+            margin:auto;
+            display:block;
+        }
+    }
+
+    &__logo {
+        display:block;
+        margin:auto;
+        @include u.breakpoint(large){
+            margin:0;
+        }
+    }
+    &__nav {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: stretch;
+        justify-content: space-evenly;
+        align-items: flex-start;
+        margin:0;
+        padding:0;
+    }
+    &__navitem{
+        display:inline-block;
+        padding:.5rem;
+        border:1px solid var(--secondary-bg-color);
+        border-radius: 1em;
+        font-size:clamp(1rem,1.3rem,1.7rem);
+        a{
+            color:var(--main-text-color);
+            text-decoration: none;
+        }
+    }
+    &__navitem.selected{
+        background-color: var(--main-bg-color);
+        
+    }
+    
+}
+
+.footer {
+    margin:auto auto 0 auto;
+    color:var(--title-bg-color);
+    &__copy{
+        padding:0;
+        margin:0;
+    }
+}

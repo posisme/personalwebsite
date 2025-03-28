@@ -1,0 +1,64 @@
+import Layout from "./Layout";
+import Footer from "./Footer";
+import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import Markdown from 'react-markdown';
+
+
+const Writing = ()=>{
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const [doc, setDoc] = useState(searchParams.get('doc'));
+    const [markdown, setMarkdown] = useState('');
+    
+    useEffect(()=>{
+        if(doc){
+        fetch("/writing_docs/"+searchParams.get('doc')+".md")
+            .then(response => response.text())
+            .then(text => setMarkdown(text))
+        }
+    },[]);
+
+    return (
+        <>
+            <Layout />
+            <main className="main">
+                <div className="wrapper main__wrapper writing__wrapper">
+                    
+                <h2 className="main__heading">Writing</h2>
+                <Doclist />
+                <article>
+                <Markdown>{markdown}</Markdown>
+                </article>
+                </div>
+                
+            </main>
+            <Footer />
+        </>
+    )
+}
+
+const Doclist = () =>{
+    const [doceles, setDocEls] = useState('');
+    useEffect(()=>{
+        fetch("/api/getdocs").then(response => response.text()).then((text)=>{
+            text = JSON.parse(text);
+            console.log(text);
+            var alleles = [];
+            text.data.forEach(function(ele){
+                var p = ele.link.split(/\.md/)[0]
+                alleles.push(<li><a href={"/writing?doc=" + p}>{ele.title}</a></li>)
+            });
+            setDocEls(alleles)
+        })
+    },[]);
+    return (
+        <>
+        <ul>
+            {doceles}
+        </ul>
+        </>
+    )
+}
+
+export default Writing;
