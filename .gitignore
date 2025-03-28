@@ -1,7 +1,6 @@
-client/node_modules/*
-client/public/*
-server/node_modules/*
-server/db/*
+node_modules
+public
+db
 
 # dependencies
 .pnp
