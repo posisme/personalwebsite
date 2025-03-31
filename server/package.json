@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server",
     "start": "node server",
-    "killold": "lsof -i :${PORT:-6125} -t | xargs kill -9"
+    "killold": "lsof -i :${PORT:-6125} -t | xargs kill -9",
+    "mon": "nodemon utils/photouploadscript",
+    "rebuild": "node utils/rebuildphotodbscript.js"
   },
   "author": "",
   "license": "ISC",
