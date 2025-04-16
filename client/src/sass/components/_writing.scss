@@ -3,3 +3,9 @@
     font-size:1.1rem;
     
 }
+
+@media print {
+    .main article{
+        font-size:1rem;
+    }
+}

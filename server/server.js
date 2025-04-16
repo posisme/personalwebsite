@@ -5,40 +5,23 @@ const cors = require('cors');
 const env = require('dotenv').config();
 const app = express();
 const path = require('path');
-// const { isReadable } = require("stream");
-// const { v4: uuidv4 } = require('uuid');
-
 const basedocsdir = "../client/public/writing_docs/";
 const fs = require('fs');
 
-const imageMagick = require('imagemagick');
-const {convert} = require('imagemagick-convert');
-const ExifReader = require('exifreader');
-const { getDefaultAutoSelectFamily } = require("net");
-
-const {dbrun,dbImg,basepicdir,rebuildPhotoDb} = require("./utils/sharedutils");
 
 
-// const { rejects } = require("assert");
+const {dbrun,dbImg,basepicdir,rebuildPhotoDb,writeExif} = require("./utils/sharedutils");
+
+
+
 app.use(express.json());
 
-// app.use((req, res, next) => {
-//     const timestamp = new Date().toISOString();
-//     const method = req.method;
-//     const url = req.url;
-//     const ip = req.ip;
-//     console.log(`[${timestamp}] ${method} ${url} from ${ip}`);
-//     next(); // Call next to pass control to the next middleware/route handler
-//   });
+
 
 app.use(cors({
-    //origin:['https://posis.me','http://localhost:3000','http://posis.me','https://www.posis.me']
     origin:'https://posis.me'
 }))
-// const db = new sqlite3.Database("./db/personalsite.db",(err)=>{
-//     if(err) {return console.error(err.message)};
-//     return db;
-// });
+
 
 
 
@@ -54,8 +37,7 @@ app.get("/rebuildpics", async (req,res)=>{
 })
 app.get("/pictures", async (req, res) => {
     var sql = "select *, group_concat(personid) as people from pics left join picspeople on picid = filename";
-    var totalsql = "select count(*) as count from pics ";
-    //console.log(sql)
+    var totalsql = "select count(*) as count from pics left join picspeople on picid = filename ";
     var sqlp = []
     if(req.query.person){
         sql = sql + " where personid = ?";
@@ -65,14 +47,12 @@ app.get("/pictures", async (req, res) => {
     sql += " group by filename order by date desc ";
     
     sql += "limit "+req.query.max_rows+" offset "+req.query.offset;
+    
     var listiles = await dbrun(sql,sqlp,"select");
     
-    listiles = listiles.map((f)=>{return f.filename});
+    listiles = listiles.map((f)=>{return {filename:f.filename,data:{people:f.people}}});
     
-    for(let i=0;i<listiles.length;i++){
-        listiles[i] = await getImg(listiles[i],{width:100,height:100});
-    }
-    var total = await dbrun(totalsql,[],"select")
+    var total = await dbrun(totalsql,sqlp,"select")
     
     res.json({
         count:15,
@@ -84,9 +64,27 @@ app.get("/pictures", async (req, res) => {
         
 })
 app.get("/picture",async (req,res)=>{
-    var pic = await getImg(req.query.picture,{width:req.query.width?req.query.width:null,height:req.query.width?req.query.width:null});
+    var pic = await dbImg({filename:req.query.picture},{width:req.query.width?req.query.width:null,height:req.query.width?req.query.width:null});
     res.json({data:pic})
 })
+app.post("/updatepics", async (req,res)=>{
+    let ret = [req.body];
+    //writeExif(basepicdir+"/"+req.body.filename,{Keywords:null});
+    var p = await dbrun("delete from picspeople where picid = ?",[req.body.filename],"delete");
+    
+    let people = [];
+    
+    if(typeof req.body.whoBox === "string"){
+        people = req.body.whoBox.split(/[\n,]/).map(f=>f.trim())
+    }
+    people.forEach(async (person)=>{
+        await dbrun("insert into picspeople (personid, picid) values (?,?)",[person.trim(), req.body.filename],"insert");
+    })
+    
+    writeExif(req.body.filename,{"Keywords":people},basepicdir+"archive/");
+    res.json(ret);
+})
+
 app.get("/getdocs",async (req,res)=>{
     var docs = await getDocs();
     res.json({data:docs});
@@ -96,9 +94,11 @@ app.get("/",(req,res)=>{
     res.json({error:"no api selected"})
 })
 async function getDocs(){
-    var alldocs = fs.readdirSync(basedocsdir);
+    var alldocs = fs.readdirSync(basedocsdir, {withFileTypes:true});
+    alldocs = alldocs.filter(dirent => dirent.isFile()).map(dirent=>dirent.name);
     var retobj = [];
     alldocs.forEach(async (d)=>{
+        console.log(d);
         var td = fs.readFileSync(basedocsdir+d);
         var title = "";
         if(td.toString('utf8').match(/^#[\s]*[\*]*([^\*]*)[\*]*\n/)){
@@ -111,97 +111,8 @@ async function getDocs(){
     })
     return retobj;
 }
-// async function dbImg(img){
-//     var deets = await ExifReader.load(basepicdir+img, {expanded:true});
-//     var people = [];
-//     if(deets.iptc && deets.iptc.Keywords && deets.iptc.Keywords.length){
-//     deets.iptc.Keywords.forEach((k)=>{
-//         people.push(k.description);
-//     })}
-   
-//     // try{
-//     //     var d = await dbrun(db,`Select filename,group_concat(personid) as people from pics join picspeople on (picid = filename) where filename = ?`,[img],"select");
-//     //     if(d && d.length < 1){
-//     //         await dbrun(db,`INSERT INTO pics (filename) VALUES(?)`,[img],"insert");
-//     //         for(p in people){
-//     //             await dbrun(db,`INSERT INTO picspeople (picid, personid) VALUES(?,?)`,[img,people[p]],"insert");
-//     //         }
-//     //     }
-        
-//     // }
-//     // catch(error){
-//     //     console.log(error)
-//     // }
-//     // finally{
-//     //     db.close();
-//     // }
-//     deets.people = people.join(", ");
-//     return deets;
-    
-// }
 
-// const dbrun = async (sql, params = [],crud)=>{
-    
-//     if(!crud){
-//         crud = "select";
-//     }
-//     if(crud == "update" || crud == "insert"){
-//         return new Promise((resolve, reject)=>{
-//             db.run(sql,params,(err)=>{
-//                 if(err) reject(err);
-//                 resolve();
-//             })
-//         })
-//     }
-//     else if(crud == "select"){
-//         return new Promise((resolve, reject)=>{
-//             db.all(sql,params,(err,rows)=>{
-//                 if(err) reject(err);
-//                 resolve(rows);
-//             })
-//         })
-//     }
-//     else if(crud == "create" || crud=="delete"){
-//         return new Promise((resolve,reject)=>{
-//             db.exec(sql,(err)=>{
-//                 if(err) reject(err);
-//                 resolve();
-//             });
-//         });
-//     }
-// }
-async function getImg(img,size){
-    var i = await dbImg(img);
-    return {filename:img,data:i};
-    // if(fs.existsSync("../client/public/thumbs/"+img)){
-    //     return {filename:img}
-    // }
-    
-    // var args = {
-    //     srcData:fs.readFileSync(basepicdir+img),
-    //     resize:"crop",
-    //     format:"JPG"
-    // }
-    // if(size && size.width){
-    //     args.width = size.width;
-    // }
-    // if(size && size.height){
-    //     args.height = size.height;
-    // }
-    // try {
-    //     const newimg = await convert(args);
-    //     //fs.writeFile("../client/public/thumbs/"+img,newimg,(err)=>{
-    //         //console.log(err);
-    //     //})
-    //     return {filename:img,data:newimg};
-    // } catch (error) {
-    //     //fs.renameSync(basepicdir+img,basepicdir+"hold/"+img)
-    //     console.log(error);
-    //     return false;
-    // }
-    
-    
-}
+
 
 app.listen(6125, () => {
     console.log('running on port 6125...');

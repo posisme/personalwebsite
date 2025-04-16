@@ -3,8 +3,7 @@ import Layout from "./Layout";
 import Footer from "./Footer";
 import axios from 'axios';
 import { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, Link } from 'react-router-dom';
 
 const url = 'https://posis.me/api/pictures/';
 
@@ -38,6 +37,7 @@ const PicList = (props)=>{
     const [totalpics,setTotal] = useState(0);
     
     
+    
     let maxrows = Utils.isMobile()?10:15;
         
 
@@ -48,6 +48,7 @@ const PicList = (props)=>{
     
     
     useEffect((props)=>{
+        
         async function startFetch(){
             
             var urlparams = ["offset="+offset,"max_rows="+maxrows];
@@ -60,15 +61,7 @@ const PicList = (props)=>{
                 if(result && result.data){
                     setTotal(result.data.total-maxrows);
                     result.data.files.forEach(function(p,index){
-                        var src;
-                        if(p.data && p.data.Thumbnail){
-                            //const base64String = btoa(String.fromCharCode(...new Uint8Array(p.data.Thumbnail.base64)));
-                            src = "data:image/jpg;base64," +p.data.Thumbnail.base64;
-                            
-                        }
-                        else{
-                            src="/pics/"+p.filename;
-                        }
+                        var src="/pics/"+p.filename;
                         pics.push(<div className="main__picturegroup" 
                                         onClick={()=>{window.location = "/pic?picture="+p.filename+"&"+urlparams.join("&")}}>
                                     <img className="main__picture"  
@@ -108,18 +101,31 @@ const PicList = (props)=>{
             <button onClick={() => handleOffsetChange(totalpics)}>&gt;&gt;</button>
         </div>
        <input type="hidden" id="currlist" value={"{offset:"+offset+",person:"+person+"}"}/>
-       <div><a href='#' onClick={() => rebuildpics()}>Rebuild pics</a></div>
+       <div><LoadLink /></div>
 
         </>
     );
     
 }
-const rebuildpics = async ()=>{
-    const response = await fetch("/api/rebuildpics");
-    if(response.ok){
-        alert("done rebuilding")
+
+const LoadLink = () =>{
+    const [loading, setLoading] = useState(false);
+    const rebuildpics = async (props)=>{
+        setLoading(true);
+        if(loading){
+            return false;
+        }
+        const response = await fetch("/api/rebuildpics");
+        if(response.ok){
+            setLoading(false);
+        }
     }
+    return (
+        <Link loading={loading} id="rebuildpicslink" disabled={loading} onClick={() => rebuildpics()}>{loading ? 'Rebuilding, please wait...': 'Rebuild pics'}</Link>
+    )
 }
+
+
 
 
 export default Pictures;

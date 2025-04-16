@@ -3,6 +3,10 @@ import Footer from "./Footer";
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import Markdown from 'react-markdown';
+import { useRef, forwardRef } from "react";
+import { useReactToPrint } from "react-to-print";
+
+
 
 
 const Writing = ()=>{
@@ -10,6 +14,9 @@ const Writing = ()=>{
     const searchParams = new URLSearchParams(location.search);
     const [doc, setDoc] = useState(searchParams.get('doc'));
     const [markdown, setMarkdown] = useState('');
+    const componentRef = useRef();
+    
+    
     
     useEffect(()=>{
         if(doc){
@@ -18,7 +25,9 @@ const Writing = ()=>{
             .then(text => setMarkdown(text))
         }
     },[]);
-
+    const handleClick = useReactToPrint({
+        content:componentRef.current
+    });
     return (
         <>
             <Layout />
@@ -27,7 +36,9 @@ const Writing = ()=>{
                     
                 <h2 className="main__heading">Writing</h2>
                 <Doclist />
+                
                 <article>
+                <button onClick={handleClick}>Print</button>
                 <Markdown>{markdown}</Markdown>
                 </article>
                 </div>
@@ -37,6 +48,8 @@ const Writing = ()=>{
         </>
     )
 }
+
+
 
 const Doclist = () =>{
     const [doceles, setDocEls] = useState('');
