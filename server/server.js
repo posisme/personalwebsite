@@ -65,7 +65,7 @@ app.get("/pictures", async (req, res) => {
 })
 app.get("/picture",async (req,res)=>{
     var pic = await dbImg({filename:req.query.picture},{width:req.query.width?req.query.width:null,height:req.query.width?req.query.width:null});
-    res.json({data:pic})
+    res.json({data:pic,allpeople:await dbrun("select distinct personid from picspeople group by personid order by count(personid) desc",[],"select")})
 })
 app.post("/updatepics", async (req,res)=>{
     let ret = [req.body];
@@ -73,13 +73,21 @@ app.post("/updatepics", async (req,res)=>{
     var p = await dbrun("delete from picspeople where picid = ?",[req.body.filename],"delete");
     
     let people = [];
-    
-    if(typeof req.body.whoBox === "string"){
-        people = req.body.whoBox.split(/[\n,]/).map(f=>f.trim())
+    for(let i in req.body){
+        if(i.match(/^taggedPeople-/)){
+            people.push(req.body[i]);
+        }
     }
+    console.log(people);
+    if(typeof req.body.whoBox === "string" && req.body.whoBox != ""){
+        peoplesplit = req.body.whoBox.split(/[\n,]/).map(f=>f.trim());
+        people = [...people,...peoplesplit];
+    }
+    console.log(people);
     people.forEach(async (person)=>{
         await dbrun("insert into picspeople (personid, picid) values (?,?)",[person.trim(), req.body.filename],"insert");
     })
+    
     
     writeExif(req.body.filename,{"Keywords":people},basepicdir+"archive/");
     res.json(ret);

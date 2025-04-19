@@ -54,6 +54,8 @@
         padding:5px;
         font-weight: bold;
         color:white;
+        width:100%;
+        overflow:hidden;
     }
     &__picturegroup{
         width:50%;
@@ -79,6 +81,10 @@
     &__videoplayer{
         display:block;
         height:30em;
+    }
+    &__peoplelist{
+        height:200px;
+        overflow-y: scroll;
     }
 }
 button{

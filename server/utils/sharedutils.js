@@ -70,11 +70,16 @@ async function writeExif(img, tags,archivepath){
             
             console.log("written");
         });
-        fs.renameSync(basepicdir+img+"_original",archivepath+img+"_original");
+        try{
+            fs.renameSync(basepicdir+img+"_original",archivepath+img+"_original");
+        }
+        catch(err){
+            console.log("ERROR1",err);
+        }
         
     }
     catch (err){
-        console.log("ERROR",tags,err);
+        console.log("ERROR2",tags,err);
         return false;
 
     }
