@@ -39,7 +39,7 @@ app.get("/rebuildpics", async (req,res)=>{
 })
 app.get("/pictures", async (req, res) => {
     var sql = "select *, group_concat(personid) as people from pics left join picspeople on picid = filename";
-    var totalsql = "select count(*) as count from pics left join picspeople on picid = filename ";
+    var totalsql = "select count(*) as count from pics";
     var sqlp = []
     if(req.query.person){
         sql = sql + " where personid = ?";
