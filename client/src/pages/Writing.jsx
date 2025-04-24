@@ -25,9 +25,15 @@ const Writing = ()=>{
             .then(text => setMarkdown(text))
         }
     },[]);
-    const handleClick = useReactToPrint({
-        content:componentRef.current
-    });
+
+    const reactToPrintContent = () =>{
+        return componentRef.current;
+    }
+    const handlePrint = useReactToPrint({
+        documentTitle: "File Name",
+    })
+
+    
     return (
         <>
             <Layout />
@@ -37,9 +43,13 @@ const Writing = ()=>{
                 <h2 className="main__heading">Writing</h2>
                 <Doclist />
                 
-                <article>
-                <button onClick={handleClick}>Print</button>
-                <Markdown>{markdown}</Markdown>
+                <article className="writing">
+                <button onClick={()=>handlePrint(reactToPrintContent)}>Print</button>
+                <div className="writing__print" ref={componentRef}>
+                    <div className="writing__content">
+                        <Markdown>{markdown}</Markdown>
+                    </div>
+                </div>
                 </article>
                 </div>
                 

@@ -1,11 +1,27 @@
 @use "../util" as u;
-.main article{
-    font-size:1.1rem;
-    
+.writing{
+    &__print{
+        font-size:1.1rem;
+    }
 }
 
 @media print {
-    .main article{
+    @page{
         font-size:1rem;
+        margin:.5in;
+        size:landscape;
+    }
+    body{
+        margin:0;
+        padding-bottom:0;
+    }
+    .writing{
+        &__print{     
+            display:flow;  
+        }
+        &__content{
+            columns:2;
+            column-gap:.5in;
+        }
     }
 }

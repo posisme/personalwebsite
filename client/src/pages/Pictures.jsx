@@ -62,11 +62,11 @@ const PicList = (props)=>{
                     setTotal(result.data.total-maxrows);
                     result.data.files.forEach(function(p,index){
                         var src="/pics/"+p.filename;
-                        pics.push(<div className="main__picturegroup" 
+                        pics.push(<div className="pics__picturegroup" 
                                         onClick={()=>{window.location = "/pic?picture="+p.filename+"&"+urlparams.join("&")}}>
-                                    <img className="main__picture"  
+                                    <img className="pics__picture"  
                                     src={src}/>
-                                    <div className="main__pictureoverlay">{p.data.people}</div>
+                                    <div className="pics__pictureoverlay">{p.data.people}</div>
                                   </div>
                         );
                     })
@@ -91,10 +91,10 @@ const PicList = (props)=>{
     return (
         <>
         
-        <div className="main__picgroup">
+        <div className="pics__picgroup">
         {piclist}
         </div>
-        <div className="main__buttongroup">
+        <div className="pics__buttongroup">
             <button onClick={() => handleOffsetChange(0)}>&lt;&lt;</button>
             <button onClick={() => handleOffsetChange(offset - maxrows)}>&lt;</button>
             <button onClick={() => handleOffsetChange(offset + maxrows)}>&gt;</button>

@@ -2,13 +2,13 @@
 body {
     margin:auto;
     background-color: var(--main-bg-color);
-    
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .header{
     background-color: var(--secondary-bg-color);
-    // font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    color:var(--main-text-color);
+    
+    color:var(--secondary-text-color);
     margin-bottom:2rem;
     margin-top:1rem;
     &__wrapper{
@@ -53,20 +53,23 @@ body {
         border-radius: 1em;
         font-size:clamp(1rem,1.3rem,1.7rem);
         a{
-            color:var(--main-text-color);
+            color:var(--secondary-text-color);
             text-decoration: none;
         }
     }
     &__navitem.selected{
         background-color: var(--main-bg-color);
-        
+        a{
+            color:var(--main-text-color);
+            text-decoration: none;
+        }
     }
     
 }
 
 .footer {
     margin:auto auto 0 auto;
-    color:var(--title-bg-color);
+    color:var(--title-text-color);
     &__copy{
         padding:0;
         margin:0;

@@ -1,0 +1,50 @@
+@use "../util" as u;
+.pics{
+    &__picgroup{
+        display:flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+    &__picture{
+        width:100%;
+        height:auto;
+        display:block;
+        object-fit: cover;
+        max-height:100px;
+        
+    }
+    &__pictureoverlay{
+        float:left;
+        position:relative;
+        // left: 0;
+        top:-100px;
+        z-index: 1000;
+        background-color: hsla(0, 0%, 50%, 0.301);
+        padding:5px;
+        font-weight: bold;
+        color:white;
+        width:100%;
+        overflow:hidden;
+    }
+    &__picturegroup{
+        width:50%;
+        height:100px;
+        @include u.breakpoint(large){
+            width:20%;
+        }
+        outline:1px solid;
+        position:relative;
+    }
+    &__singlepicture{
+        display:block;
+        width:100%;
+        height:auto;
+    }
+    &__buttongroup{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        
+    }
+}
