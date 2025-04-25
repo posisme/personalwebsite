@@ -11,8 +11,8 @@ const About = ()=>{
                 <div className="main__wrapper wrapper about__wrapper">
                     <h2 className="main__heading">About Randy</h2>
                     <div className="main__headshot-group">
-                    <img className="main__headshot" src={familypic} />
-                    <img className="main__headshot" src={uspic} />
+                    <img className="main__headshot" alt="Lauren, Atticus, and Randy Pospisil" src={familypic} />
+                    <img className="main__headshot" alt="Randy and Kim Pospisil" src={uspic} />
                     </div>
                     <p className="main__hometext">I'm a father, a husband, a son, and a child of the King. When I was about 5 years
                          old I was baptized as a believer in Jesus Christ, but I didn't live my life that way most of my young life. 

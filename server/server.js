@@ -2,10 +2,10 @@
 
 const express = require("express");
 const cors = require('cors');
-const env = require('dotenv').config();
+const env = require('dotenv').config({path:'../.env'});
 const app = express();
 const path = require('path');
-const basedocsdir = "../client/public/writing_docs/";
+const basedocsdir = process.env.BASEDOCDIR;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;

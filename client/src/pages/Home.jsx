@@ -7,7 +7,7 @@ const Home = ()=>{
             <Layout />
             <main className="main">
                 <div className="wrapper main__wrapper">
-                    <img className="main__headshot" src={headshot} alt="Randy Pospisil" />
+                    <img className="main__headshot" alt="Randy Pospisil" src={headshot} alt="Randy Pospisil" />
                     <div className="main_biowrapper">
                     <h2 className="main__heading">Welcome to Posis.me!</h2>
                     <p className="main__hometext">My name is Randy Pospisil. So Pos is...me! Here's you'll find links to my pictures, videos of past

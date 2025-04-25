@@ -1,6 +1,6 @@
 node_modules
-public/*
-!public/index.html
+client/public/*
+!client/public/index.html
 db
 
 # dependencies
@@ -26,3 +26,5 @@ yarn-error.log*
 
 personal-site-docker-github
 personal-site-docker-github.pub
+
+.env

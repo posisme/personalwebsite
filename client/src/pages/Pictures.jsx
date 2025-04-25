@@ -65,6 +65,7 @@ const PicList = (props)=>{
                         pics.push(<div className="pics__picturegroup" 
                                         onClick={()=>{window.location = "/pic?picture="+p.filename+"&"+urlparams.join("&")}}>
                                     <img className="pics__picture"  
+                                    alt={"picture of " + p.data.people}
                                     src={src}/>
                                     <div className="pics__pictureoverlay">{p.data.people}</div>
                                   </div>

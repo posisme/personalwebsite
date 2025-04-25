@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const env = require('dotenv').config();
+const env = require('dotenv').config({path:"../../.env"});
 const path = require('path');
 const fs = require('fs');
 const ExifReader = require('exifreader');
 const sqlite3 = require("sqlite3").verbose();
-const basepicdir = "/data/photoupload/upload/";
+const basepicdir = process.env.BASEPICDIR;
 const db = new sqlite3.Database(path.join(__dirname,"../db/personalsite.db"),(err)=>{
     if(err) {return console.error(err.message)};
     return db;

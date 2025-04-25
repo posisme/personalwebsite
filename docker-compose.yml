@@ -9,6 +9,9 @@ services:
     - pictures:/usr/app/client/public/pics
     - writing_docs:/usr/app/client/public/writing_docs
     - db:/usr/app/server/db
+   environment:
+    BASEDOCDIR="/usr/app/client/public/writing_docs/"
+    BASEPICDIR="/usr/app/client/public/pics/"
 volumes:
   pictures:
     driver: local
