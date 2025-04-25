@@ -3,8 +3,8 @@
 echo "Starting server"
 cd /usr/app/server/
 npm install
-npm start &
+screen -dmS "server" bash -c "npm start"
 echo "Starting client"
 cd /usr/app/client/
 npm install
-npm start
+screen -dmS "client" bash -c "npm start"
