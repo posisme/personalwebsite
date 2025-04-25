@@ -1,5 +1,6 @@
 FROM node:20
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-client
+RUN apt-get install screen
 RUN mkdir -p /root/.ssh
 COPY personal-site-docker-github /root/.ssh/personal-site-docker-github
 RUN chmod 400 /root/.ssh/personal-site-docker-github
