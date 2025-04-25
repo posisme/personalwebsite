@@ -14,9 +14,7 @@ RUN ls /usr/app
 EXPOSE 3000
 EXPOSE 6125
 
-WORKDIR /usr/app/client
-RUN npm install
-CMD [ "npm", "start"]
-WORKDIR /usr/app/server
-RUN npm install
-CMD [ "npm", "start"]
+
+RUN chmod +x /usr/app/startupscript.sh
+
+CMD ["/usr/app/startupscript.sh"]

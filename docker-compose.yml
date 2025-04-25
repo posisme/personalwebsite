@@ -7,7 +7,8 @@ services:
     - "6125:6125"
    volumes:
     - pictures:/usr/app/client/public/pics
-    - writing_docs:/urs/app/client/public/writing_docs
+    - writing_docs:/usr/app/client/public/writing_docs
+    - db:/usr/app/server/db
 volumes:
   pictures:
     driver: local
@@ -21,3 +22,9 @@ volumes:
       type: none
       o: bind
       device: /home/randy/writing_docs
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/randy/personalsitedata/db
