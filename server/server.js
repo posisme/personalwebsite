@@ -43,7 +43,7 @@ app.get("/pictures", async (req, res) => {
     var sqlp = []
     if(req.query.person){
         sql = sql + " where personid = ?";
-        totalsql = totalsql + " where personid = ?";
+        totalsql = totalsql + " left join picspeople on picid = filename where personid = ?";
         sqlp.push(req.query.person);
     }
     sql += " group by filename order by date desc ";
