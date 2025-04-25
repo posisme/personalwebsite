@@ -36,7 +36,7 @@ const SinglePic = () =>{
                 var deets = [];
                 
                 
-                pics= <img className="main__singlepicture" src={"/pics/"+result.data.data.filename} />;
+                pics= <img className="pics__singlepicture" src={"/pics/"+result.data.data.filename} />;
                 // if(result.data.data.data.gps.Latitude && result.data.data.data.gps.Longitude){
                 //     deets.push("Location: "+result.data.data.data.gps.Latitude +" "+ result.data.data.data.gps.Longitude)
                 // }
