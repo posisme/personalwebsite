@@ -8,7 +8,7 @@ COPY githubhostkeys.txt /root/.ssh/known_hosts
 WORKDIR /usr/app
 
 RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/personal-site-docker-github" git clone git@github.com:posisme/personalwebsite.git /usr/app
-RUN git checkout main
+RUN git checkout feature/pick-person-interface
 RUN ls /usr/app
 
 
