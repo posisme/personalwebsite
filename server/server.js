@@ -179,6 +179,6 @@ async function getDocs(){
 
 
 
-app.listen(process.env.SERVERPORT, () => {
-    console.log(`running on port ${process.env.SERVERPORT}...`);
+app.listen(6125, () => {
+    console.log(`running on port 6125...`);
 });
