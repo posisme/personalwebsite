@@ -1,10 +1,9 @@
-version: "3.0"
 services:
   web:
     build: .
     ports:
-    - "3000:3001"
-    - "6125:6126"
+    - "3000:3000"
+    - "6125:6125"
     volumes:
     - pictures:/usr/app/client/public/pics
     - writing_docs:/usr/app/client/public/writing_docs
@@ -12,7 +11,6 @@ services:
     environment:
       BASEDOCDIR: "/usr/app/client/public/writing_docs/"
       BASEPICDIR: "/usr/app/client/public/pics/"
-    container_name: personalwebsite-web-feature-pick-person-interface
 volumes:
   pictures:
     driver: local
