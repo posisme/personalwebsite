@@ -1,7 +1,7 @@
-version: "1.1"
 services:
   web:
     ports:
-    - "3000:3001"
-    - "6125:6126"
+    - "3001:3000"
+    - "6126:6125"
     container_name: personalwebsite-web-feature-pick-person-interface
+    image: personalwebsite-web-dev:1.0

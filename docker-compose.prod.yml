@@ -5,3 +5,4 @@ services:
     - "3000:3000"
     - "6125:6125"
     container_name: personalwebsite-web-prod
+    image: personalwebsite-web-prod
