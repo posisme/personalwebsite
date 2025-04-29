@@ -12,6 +12,7 @@ services:
    environment:
     BASEDOCDIR: "/usr/app/client/public/writing_docs/"
     BASEPICDIR: "/usr/app/client/public/pics/"
+    SERVERPORT: 6126
 volumes:
   pictures:
     driver: local

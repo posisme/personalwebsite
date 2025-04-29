@@ -7,4 +7,4 @@ screen -dmS "server" bash -c "npm start"
 echo "Starting client"
 cd /usr/app/client/
 npm install
-screen -dmS "client" bash -c "npm start"
+screen -dmS "client" bash -c "PORT=3001 npm start"
