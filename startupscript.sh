@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Starting nginx proxy server"
-nginx -g "daemon off;"
+nginx -g "daemon off;" &
 echo "Starting server"
 cd /usr/app/server/
 npm install --silent
