@@ -8,5 +8,7 @@ echo "Starting client"
 cd /usr/app/client/
 npm install --silent
 screen -dmS "client" bash -c "npm start"
+echo "Starting SSH server..."
+/usr/sbin/sshd &
 echo "Starting nginx proxy server"
 screen -dmS "nginx" bash -c "nginx -g 'daemon off;' -c /etc/nginx/sites-available/reverse-proxy"

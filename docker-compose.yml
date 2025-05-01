@@ -4,9 +4,8 @@ services:
     image: personalsite-web-prod
     container_name: personalsite-web-prod
     ports:
-     - "80:80"
-    # - "3000:3000"
-    # - "6125:6125"
+    - "3000:3000"
+    - "6125:6125"
     volumes:
     - pictures:/usr/app/client/public/pics
     - writing_docs:/usr/app/client/public/writing_docs
