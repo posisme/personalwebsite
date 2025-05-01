@@ -1,0 +1,4 @@
+services:
+  web:
+    image: personalsite-web-dev
+    container_name: personalsite-web-dev
