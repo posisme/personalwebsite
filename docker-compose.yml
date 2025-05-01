@@ -1,9 +1,12 @@
 services:
   web:
     build: .
+    image: personalsite-web-prod
+    container_name: personalsite-web-prod
     ports:
-    - "3000:3000"
-    - "6125:6125"
+     - "80:80"
+    # - "3000:3000"
+    # - "6125:6125"
     volumes:
     - pictures:/usr/app/client/public/pics
     - writing_docs:/usr/app/client/public/writing_docs
@@ -17,16 +20,16 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /data/photoupload/upload
+      device: ../Pictures
   writing_docs:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/randy/writing_docs
+      device: ../writing_docs
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/randy/personalsitedata/db
+      device: ../personalsitedata/db

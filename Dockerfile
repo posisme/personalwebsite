@@ -1,8 +1,10 @@
 FROM node:20
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-client
-RUN apt-get install screen -y
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-client nginx screen
+
+# RUN apt-get install screen -y
 RUN mkdir -p /root/.ssh
 COPY personal-site-docker-github /root/.ssh/personal-site-docker-github
+COPY nginx.conf /etc/nginx/sites-available/reverse-proxy
 RUN chmod 400 /root/.ssh/personal-site-docker-github
 COPY githubhostkeys.txt /root/.ssh/known_hosts
 WORKDIR /usr/app
@@ -11,11 +13,11 @@ RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/personal-site-docker-github" git clone gi
 RUN git checkout feature/pick-person-interface
 RUN ls /usr/app
 
-
-EXPOSE 3000
-EXPOSE 6125
+EXPOSE 80
+# EXPOSE 3000
+# EXPOSE 6125
 
 
 RUN chmod +x /usr/app/startupscript.sh
  
-CMD /usr/app/startupscript.sh && tail -f /dev/null
+CMD ["/bin/bash", "-c", "/usr/app/startupscript.sh && tail -f /dev/null"]
