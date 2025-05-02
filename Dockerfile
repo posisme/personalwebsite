@@ -12,7 +12,8 @@ RUN chown root:root /root/.ssh /root/.ssh/authorized_keys
 
 COPY githubhostkeys.txt /root/.ssh/known_hosts
 WORKDIR /usr/app
-
+RUN mkdir /var/run/sshd
+RUN chmod -755 /var/run/sshd
 RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/personal-site-docker-github" git clone git@github.com:posisme/personalwebsite.git /usr/app
 RUN git checkout feature/pick-person-interface
 RUN cp nginx.conf /etc/nginx/sites-available/reverse-proxy

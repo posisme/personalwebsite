@@ -13,6 +13,7 @@ services:
     environment:
       BASEDOCDIR: "/usr/app/client/public/writing_docs/"
       BASEPICDIR: "/usr/app/client/public/pics/"
+      GIT_SSH_COMMAND: "ssh -i /root/.ssh/personal-site-docker-github" 
 volumes:
   pictures:
     driver: local

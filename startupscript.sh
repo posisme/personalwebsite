@@ -3,7 +3,7 @@
 echo "Starting server"
 cd /usr/app/server/
 npm install --silent
-screen -dmS "server" bash -c "npm start"
+screen -dmS "server" bash -c "npm run dev"
 echo "Starting client"
 cd /usr/app/client/
 npm install --silent
