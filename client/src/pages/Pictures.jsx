@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from "react";
 import { useLocation, Link } from 'react-router-dom';
 
-const url = 'https://posis.me/api/pictures/';
+const url = '/api/pictures/';
 
 
 const Pictures = () =>{
