@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 
 
-const url = 'https://posis.me/api/picture';
+const url = '/api/picture';
 
 
 const SinglePic = () =>{

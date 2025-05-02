@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-const env = require('dotenv').config({path:"../../.env"});
+const env = require('dotenv').config();
 const path = require('path');
 const fs = require('fs');
 const ExifReader = require('exifreader');
 const sqlite3 = require("sqlite3").verbose();
 const basepicdir = process.env.BASEPICDIR;
+console.log(basepicdir)
 const db = new sqlite3.Database(path.join(__dirname,"../db/personalsite.db"),(err)=>{
     if(err) {return console.error(err.message)};
     return db;
@@ -59,6 +60,7 @@ const dbrun = async (sql, params = [],crud)=>{
 }
 
 async function dbImg(img){
+    
     var deets = await ExifReader.load(basepicdir+img.filename, {expanded:true});
     deets.people = img.people;
     return {filename:img.filename,data:deets};

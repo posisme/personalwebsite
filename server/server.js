@@ -66,6 +66,7 @@ app.get("/pictures", async (req, res) => {
         
 })
 app.get("/picture",async (req,res)=>{
+    
     var pic = await dbImg({filename:req.query.picture},{width:req.query.width?req.query.width:null,height:req.query.width?req.query.width:null});
     res.json({data:pic,allpeople:await dbrun("select distinct personid from picspeople group by personid order by count(personid) desc",[],"select")})
 })
