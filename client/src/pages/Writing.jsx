@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import Markdown from 'react-markdown';
 import { useRef, forwardRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize ,{ defaultSchema } from 'rehype-sanitize';
 
 
 
@@ -32,7 +34,14 @@ const Writing = ()=>{
     const handlePrint = useReactToPrint({
         documentTitle: "File Name",
     })
+    const customSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes, 
+    '*': [...(defaultSchema.attributes['*'] || []), 'style'], 
+  },
 
+};
     
     return (
         <>
@@ -47,7 +56,7 @@ const Writing = ()=>{
                 <button onClick={()=>handlePrint(reactToPrintContent)}>Print</button>
                 <div className="writing__print" ref={componentRef}>
                     <div className="writing__content">
-                        <Markdown>{markdown}</Markdown>
+                        <Markdown rehypePlugins={[rehypeRaw,rehypeSanitize(customSchema)]}>{markdown}</Markdown>
                     </div>
                 </div>
                 </article>

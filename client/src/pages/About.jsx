@@ -24,6 +24,7 @@ const About = ()=>{
                         but I was doing everything I could to ignore it. I said ENOUGH! Either this faith is mine, or forget it! But, 
                         by God's grace, He convinced me that all of those stories from the Bible I heard as a kid were true, that Jesus 
                         was real, and that He loved me. I decided to truly follow Him.
+
                     </p>
                     <p className="main__hometext">From there, I decided to pour my life into following Him, but I knew I needed to know 
                         more, so I attended <a href='https://dts.edu'>Dallas Theological Seminary</a>. I earned a Masters of Theology (Th.M.) 

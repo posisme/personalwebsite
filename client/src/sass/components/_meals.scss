@@ -1,0 +1,43 @@
+@use "../util" as u;
+.meals{
+    &__list{
+        list-style: none;
+        margin:0;
+        padding:0;
+    }
+    
+    &__listitem{
+        font-size:1.5rem;
+        padding-block-end:1rem;
+        input{
+            width:1.5rem;
+            height:1.5rem;
+            margin-right:.5rem;
+        }
+    }
+    &__reload{
+        display: block;
+        position: fixed;
+        width:8ch;
+        left: 70%;
+        top: 10%;
+    }
+    @include u.breakpoint(large){
+        &__listitem{
+        font-size:1.1rem;
+        padding:1rem;
+        input{
+            width: 1.1rem;
+            height:1.1rem;
+            margin-right:.5rem;
+        }
+    }
+    &__reload{
+        display: block;
+        position: fixed;
+        left: 75%;
+        top: 10%;
+    }
+    }
+}
+
