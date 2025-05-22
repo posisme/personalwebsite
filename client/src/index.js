@@ -13,6 +13,7 @@ import Writing from "./pages/Writing";
 import Dashboard from "./pages/Dashboard";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
+import Meals from "./pages/Meals";
 import "./sass/styles.scss";
 
 
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/pic" element={<SinglePic />} />
             <Route path="/writing" element={<Writing doc=""/>} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/meals" element={<Meals />} />
             
             
             <Route path="*" element={<NoPage />} />
@@ -51,6 +53,7 @@ export default function App() {
           <Route path="/pic" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="*" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/writing" element={<Writing doc=""/>} />
+          <Route path="/meals" element={<Meals />} />
         </Routes>
       </BrowserRouter>
       )

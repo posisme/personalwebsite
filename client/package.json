@@ -5,11 +5,15 @@
   "dependencies": {
     "axios": "^1.8.2",
     "react": "^19.0.0",
+    "react-datepicker": "^8.3.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.10.1",
-    "react-to-print": "^3.0.5"
+    "react-to-print": "^3.0.5",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -6,27 +6,102 @@ const env = require('dotenv').config({path:'../.env'});
 const app = express();
 const path = require('path');
 const basedocsdir = process.env.BASEDOCDIR;
+const basemealsdir = process.env.BASEMEALSDIR;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const https = require('https');
+const bearerToken = require('bearer-token');
+const authenticate = (req,res,next)=>{
+    const origin = req.headers.referer;
+    const host = req.headers.host;
+    
+    if(origin && host && (new URL(origin).host === host || new URL(origin).host == "posis.me")){
+        //console.log("Request from same domain");
+        next();
+        return;
+    }
+    else if (!origin || origin === "") {
+        if (
+            req.headers['x-forwarded-for'] === '204.144.226.188'
+        ) {
+            //console.log("Request from localhost, skipping authentication");
+            next();
+            return;
+        }
+    }
+    bearerToken(req,async (err,token)=>{
+        
+        if(err){
+            return res.status(501).json({error:"Auth error."})
+        }
+        if(!token){
+            return res.status(401).json({error:"No Token Provided"});
+        }
+        if(!await isValidApikey(token)){
+            return res.status(403).json({error:"Invalid API token"});
+        }
+        next();
+        
+        
+    })
+    
+    
+}
+const isValidApikey = async (apikey)=>{
+    try{
+        const hashedkeys = await dbrun("select api_key from api_keys",[],"select");
+        for(i=0;i<hashedkeys.length;i++){
+            var b = await bcrypt.compare(apikey,hashedkeys[i].api_key);
+            if(b){
+                return true;
+            }
+        } 
+    } catch(error){
+        console.error("ERROR",error);
+        return false;
+    }
+    return false;
 
+}
 
 
 const {dbrun,dbImg,basepicdir,rebuildPhotoDb,writeExif} = require("./utils/sharedutils");
 
-
-
 app.use(express.json());
 
+app.use(authenticate);
 
 
 app.use(cors({
     origin:'https://posis.me'
 }))
 
+app.get("/test",(req,res)=>{
+    res.json({hello:"hello"});
+})
 
-
-
+app.post("/meals",(req,res)=>{
+    var meals = req.body;
+    fs.writeFileSync(basemealsdir+"grocerylist.json",JSON.stringify(meals));
+    res.json(meals);
+})
+app.get("/grocerylist",(req,res)=>{
+    fs.readFile(basemealsdir+"grocerylist.json",'utf-8',(err,data)=>{
+        if(err){console.log(err)}
+        try{
+            var dataj = JSON.parse(data);
+        }
+        catch(err){
+            console.log(err);
+        }
+        res.json(dataj)
+    })
+})
+app.post("/groceryupdate",(req,res)=>{
+    fs.writeFileSync(basemealsdir+"grocerylist.json",JSON.stringify(req.body))
+    res.json(req.body)
+})
 //the nginx redirects anything /api to this servers / endpoint, so though it is going to /api, this
 //endpoint is just /
 app.get("/rebuildpics", async (req,res)=>{
@@ -37,6 +112,10 @@ app.get("/rebuildpics", async (req,res)=>{
     
     
 })
+
+
+
+
 app.get("/pictures", async (req, res) => {
     var sql = "select *, group_concat(personid) as people from pics left join picspeople on picid = filename";
     var totalsql = "select count(*) as count from pics";
@@ -63,6 +142,7 @@ app.get("/pictures", async (req, res) => {
         //total:100,
         files:listiles
     });
+
         
 })
 app.get("/picture",async (req,res)=>{
@@ -130,10 +210,33 @@ app.post("/setlogin", async (req,res)=>{
     
     
 })
+app.post("/setapikey", async (req,res)=>{
+    var ret;
+    console.log(req.body);
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+        if (err) {
+          // Handle error
+          return;
+        }
+        bcrypt.hash(req.body.apikey, salt,( err,hash)=>{
+
+            if(err){
+                console.log("error in password", err);
+                res.send({"d":"error"});
+            }
+            dbrun("insert into api_keys (api_key) values (?)",
+                [  
+                    hash
+                ],
+                "insert");
+            res.send({"d":"updated"});
+        });
+      });
+    
+    
+})
 app.use('/login', async (req,res)=>{
     var ret = "";
-    
-    console.log(ret);
     var user = await dbrun("select username,hashepassword as h,name,email  from authusers where username = ?",[req.body.username],"select")
     if(user && user.length){
         bcrypt.compare(req.body.password,user[0].h,(err,result)=>{
