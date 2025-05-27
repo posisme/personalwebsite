@@ -1,6 +1,5 @@
 node_modules
 client/public/*
-client/src/jsonfiles/*
 !client/public/index.html
 db
 
@@ -29,3 +28,4 @@ personal-site-docker-github
 personal-site-docker-github.pub
 
 .env
+client/src/jsonfiles/grocerylist.json
