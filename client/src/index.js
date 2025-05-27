@@ -22,7 +22,8 @@ import {
   faFolder,
   faFile,
   faEdit,
-  faTimesCircle
+  faTimesCircle,
+  faStar
 } from '@fortawesome/free-solid-svg-icons'; // Import specific solid icons
 
 // Add the imported icons to the library
@@ -30,7 +31,8 @@ library.add(
   faFolder,
   faFile,
   faEdit,
-  faTimesCircle
+  faTimesCircle,
+  faStar
 );
 
 export default function App() {
@@ -46,8 +48,8 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/videos" element={<Videos />} />
-            <Route path="/pictures" element={<Pictures />} />
-            <Route path="/pic" element={<SinglePic />} />
+            <Route path="/pictures" element={<Pictures authtf="true"/>} />
+            <Route path="/pic" element={<SinglePic authtf="false"/>} />
             <Route path="/writing" element={<Writing doc=""/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meals" element={<Meals />} />
@@ -66,12 +68,13 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/videos" element={<Videos />} />
-          <Route path="/pictures" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
-          <Route path="/pic" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
+          <Route path="/pic" element={<SinglePic authtf="false"/>} />
+          <Route path="/pictures" element={<Pictures authtf="false"/>} />
           <Route path="*" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/writing" element={<Writing doc=""/>} />
           <Route path="/meals" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/mdviewer" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
+          <Route path="/login" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
 
         </Routes>
       </BrowserRouter>

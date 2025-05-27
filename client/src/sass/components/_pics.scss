@@ -5,27 +5,6 @@
         flex-wrap: wrap;
         flex-direction: row;
     }
-    &__picture{
-        width:100%;
-        height:auto;
-        display:block;
-        object-fit: cover;
-        max-height:100px;
-        
-    }
-    &__pictureoverlay{
-        float:left;
-        position:relative;
-        // left: 0;
-        top:-100px;
-        z-index: 1000;
-        background-color: hsla(0, 0%, 50%, 0.301);
-        padding:5px;
-        font-weight: bold;
-        color:white;
-        width:100%;
-        overflow:hidden;
-    }
     &__picturegroup{
         width:50%;
         height:100px;
@@ -35,6 +14,42 @@
         outline:1px solid;
         position:relative;
     }
+    &__picture{
+        width:100%;
+        height:auto;
+        display:block;
+        object-fit: cover;
+        max-height:100px;
+        
+    }
+    
+    &__pictureoverlay{
+        display:flex;
+        gap:0;
+        position:relative;
+        // left: 0;
+        top:-100px;
+        z-index: 1000;
+        background-color: hsla(0, 0%, 50%, 0.301);
+        padding:0;
+        font-weight: bold;
+        color:white;
+        width:100%;
+        overflow:hidden;
+    }
+    &__people{
+        width: 50%;
+        text-align: left;
+    }
+    &__favorite{
+        left:50%;
+        width:50%;
+        text-align:right;
+        background-color: transparent;
+        color:yellow;
+        box-shadow: black 3px 3px;
+    }
+    
     &__singlepicture{
         display:block;
         width:100%;
@@ -57,9 +72,27 @@
     &__container{
         position:relative;
     }
+    &__buttons{
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+    }
     &__editbutton{
         background-color: transparent;
-        color:black;
-        position:absolute;
+        
+        
+    }
+    &__favbutton.favorite{
+        background-color: transparent;
+        color:yellow;
+        box-shadow: black 3px 3px;
+    }
+    &__favbutton{
+        background-color: transparent;
+        
     }
 }

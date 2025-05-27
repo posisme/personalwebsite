@@ -27,13 +27,13 @@ const exiftool = new ExifTool({
 //const { exiftool } = require('exiftool-vendored');
 
 const dbrun = async (sql, params = [],crud)=>{
-    
+    //console.log(sql,params,crud);
     if(!crud){
         crud = "select";
     }
     if(crud == "update" || crud == "insert" || crud == "delete"){
         return new Promise((resolve, reject)=>{
-            db.run(sql,params,(err)=>{
+            db.run(sql,params,(err,i)=>{
                 if(err) reject(err);
                 resolve({resolved:crud});
 
@@ -45,6 +45,16 @@ const dbrun = async (sql, params = [],crud)=>{
             db.all(sql,params,(err,rows)=>{
                 if(err) reject(err);
                 resolve(rows);
+            })
+        })
+    }
+    else if(crud == "keyval"){
+        return new Promise((resolve, reject)=>{
+            db.all(sql,params,(err,rows)=>{
+                if(err) reject(err);
+                let nrows = {};
+                rows.forEach((a)=>{nrows[a.key]=a.val});
+                resolve(nrows);
             })
         })
     }

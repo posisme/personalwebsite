@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const url = 'https://posis.me/api/picture';
 
 
-const SinglePic = () =>{
+const SinglePic = ({authtf}) =>{
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [picture, setPic] = useState(searchParams.get('picture'));
@@ -19,7 +19,10 @@ const SinglePic = () =>{
     const [filename, setFilename] = useState(searchParams.get('picture'));
     const [people, setPeople] = useState("");
     const [editPeople, setEditPeople] =useState(false);
+    const [editFavorite, setFavorite] =useState(false);
     const [allpeople,setAllPeople]=useState([]);
+    const [auth, setAuth] = useState(authtf=="true"?true:false);
+    console.log("AUTH", auth)
     
     useEffect(()=>{
         async function startFetch(){
@@ -57,6 +60,7 @@ const SinglePic = () =>{
                     
                     setPeople(p);
                     setCheckedPeople(p);
+                    setFavorite(result.data.attrs.fav=="true"?true:false);
                     var a = [
                         ...new Set(
                             result.data.allpeople.map(
@@ -124,6 +128,15 @@ const SinglePic = () =>{
             console.log("FORMRESPO",response);
         });
     };
+    const toggleFavorite = () =>{
+        
+        
+        fetch("/api/picfav?filename="+filename+"&fav="+!editFavorite)
+            .then((res)=>{
+                console.log(res);
+            })
+        setFavorite(!editFavorite);
+    }
     
     return (
         <>
@@ -135,7 +148,7 @@ const SinglePic = () =>{
                     {/* <PeopleForm filename={filename} people={people} allpeople={allpeople} /> */}
                     
                 
-                {editPeople ? (
+                {(editPeople && auth) ? (
                     <form className="pictures__peopleform" onSubmit={handleSubmit}>
                     <div>Who is in this photo?</div>
                 <ul className="pictures__peoplelist">
@@ -164,11 +177,20 @@ const SinglePic = () =>{
             <textarea id="whoBox" name="whoBox" onChange={whoboxhandleChange} value={otherpeople}></textarea>
             <button id="submit">Update</button>
         </form>):null}
-                <div className="picture__container">
+        
+                <div className="pictures__container">
+                    {auth?(
+                    <div className="pictures__buttons">
                     <button 
                         onClick={()=>setEditPeople(!editPeople)}
                         className="pictures__editbutton"
                     >{editPeople?<FontAwesomeIcon icon="fas fa-times-circle" />:<FontAwesomeIcon icon="fas fa-edit" />}</button>
+                    <button 
+                        onClick={()=>toggleFavorite(!editFavorite)}
+                        className={editFavorite?"pictures__favbutton favorite":"pictures__favbutton"} 
+                    ><FontAwesomeIcon icon="fas fa-star" /></button>
+                    </div>
+                    ):null}
                     {picture}
                     {/* {deets} */}
                 </div>
