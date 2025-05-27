@@ -14,8 +14,20 @@ import Dashboard from "./pages/Dashboard";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
 import Meals from "./pages/Meals";
+import MDViewer from "./pages/MDViewer";
 import "./sass/styles.scss";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faFolder,
+  faFile
+} from '@fortawesome/free-solid-svg-icons'; // Import specific solid icons
 
+// Add the imported icons to the library
+library.add(
+  faFolder,
+  faFile
+);
 
 export default function App() {
   
@@ -35,6 +47,7 @@ export default function App() {
             <Route path="/writing" element={<Writing doc=""/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meals" element={<Meals />} />
+            <Route path="/mdviewer" element={<MDViewer />} />
             
             
             <Route path="*" element={<NoPage />} />
@@ -53,7 +66,9 @@ export default function App() {
           <Route path="/pic" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="*" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/writing" element={<Writing doc=""/>} />
-          <Route path="/meals" element={<Meals />} />
+          <Route path="/meals" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
+          <Route path="/mdviewer" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
+
         </Routes>
       </BrowserRouter>
       )

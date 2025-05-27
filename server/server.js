@@ -7,6 +7,7 @@ const app = express();
 const path = require('path');
 const basedocsdir = process.env.BASEDOCDIR;
 const basemealsdir = process.env.BASEMEALSDIR;
+const basemddir = process.env.BASEMDDIR;
 const fs = require('fs');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -98,6 +99,7 @@ app.get("/grocerylist",(req,res)=>{
         res.json(dataj)
     })
 })
+
 app.post("/groceryupdate",(req,res)=>{
     fs.writeFileSync(basemealsdir+"grocerylist.json",JSON.stringify(req.body))
     res.json(req.body)
@@ -178,6 +180,25 @@ app.post("/updatepics", async (req,res)=>{
 app.get("/getdocs",async (req,res)=>{
     var docs = await getDocs();
     res.json({data:docs});
+})
+
+app.get("/mdviewer",(req,res)=>{
+    var retjson = {file:""};
+    var fp = req.query.filepath != "null" ? req.query.filepath: "/"
+    if(req.query.doc){
+        var f = fs.readFileSync(basemddir+"/"+decodeURIComponent(req.query.doc)).toString('utf8');
+        retjson.file = f;
+    }
+    else{
+        retjson.filelist = fs.readdirSync(basemddir+fp).filter(file => !file.startsWith('.'))
+    }
+    res.json(retjson)
+})
+app.post("/mdpost",(req,res)=>{
+    if(req.body.filename){
+        var f = fs.writeFileSync(basemddir+"/"+req.body.filename,req.body.content);
+    }
+    res.json(f);
 })
 
 app.get("/",(req,res)=>{

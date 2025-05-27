@@ -1,0 +1,130 @@
+
+/* Header & Logo */
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Keep header visible on scroll */
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Navbar Container */
+.navbar {
+    position: relative; /* For absolute positioning of nav-list later */
+}
+
+/* Hamburger Icon */
+.hamburger {
+    display: flex; /* Show by default on mobile */
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001; /* Ensure it's above the nav-list when open */
+}
+
+.hamburger .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hide navigation list by default on mobile */
+.nav-list {
+    list-style: none;
+    background-color: #444;
+    position: absolute;
+    top: 100%; /* Position below the header */
+    right: 0;
+    width: 100%;
+    transform: translateX(100%); /* Hide off-screen to the right */
+    transition: transform 0.3s ease-in-out;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex; /* Use flexbox for vertical stacking */
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+}
+
+.nav-list li {
+    margin: 0.5rem 0;
+    width: 100%; /* Make list item full width */
+    text-align: center;
+}
+
+.nav-list a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    display: block; /* Make the whole area clickable */
+    transition: background-color 0.2s ease;
+}
+
+.nav-list a:hover,
+.nav-list a:focus {
+    background-color: #555;
+}
+
+/* JavaScript toggled class for active menu */
+.navbar.open .nav-list {
+    transform: translateX(0); /* Slide into view */
+}
+
+/* Hamburger icon transformation when menu is open */
+.navbar.open .hamburger .bar:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+}
+
+.navbar.open .hamburger .bar:nth-child(2) {
+    opacity: 0; /* Hide middle bar */
+}
+
+.navbar.open .hamburger .bar:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+}
+
+
+/* Media Query for Desktop Styles */
+@media (min-width: 768px) {
+    .hamburger {
+        display: none; /* Hide hamburger icon on desktop */
+    }
+
+    .nav-list {
+        position: static; /* Remove absolute positioning */
+        transform: translateX(0); /* Always visible */
+        background-color: transparent; /* No background */
+        box-shadow: none; /* No shadow */
+        flex-direction: row; /* Display horizontally */
+        width: auto; /* Adjust width */
+        padding: 0; /* Remove padding */
+    }
+
+    .nav-list li {
+        margin: 0 1rem; /* Adjust spacing between items */
+        width: auto;
+    }
+
+    .nav-list a {
+        padding: 0.5rem 0.8rem; /* Adjust padding */
+    }
+
+    .nav-list a:hover,
+    .nav-list a:focus {
+        background-color: transparent; /* Remove background on hover */
+        text-decoration: underline; /* Add underline on hover */
+    }
+}

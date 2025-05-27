@@ -25,7 +25,7 @@ const Meals = () => {
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify(senditems),
+            body: JSON.stringify({st:startDate,et:endDate,list:senditems}),
         })
             .then((res) => res.json())
             .then((data) => {
@@ -95,7 +95,9 @@ const Meals = () => {
                     <button className="meals__reload" onClick={ReloadWindow}>Reload</button>
                     <div className="meals__content">
                         <ul className="meals__list">
-                            {Object.entries(checkedItems).map(([key,value]) => (
+                            {Object.entries(checkedItems)
+                                .sort(([,aVal],[,bVal]) => {if(aVal == "false" || aVal == false){return -1}else{return 1};return 0;})
+                                .map(([key,value]) => (
                                 <li className="meals__listitem" key={key}>
                                     <input
                                         type="checkbox"
