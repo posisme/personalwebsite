@@ -20,13 +20,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faFolder,
-  faFile
+  faFile,
+  faEdit,
+  faTimesCircle
 } from '@fortawesome/free-solid-svg-icons'; // Import specific solid icons
 
 // Add the imported icons to the library
 library.add(
   faFolder,
-  faFile
+  faFile,
+  faEdit,
+  faTimesCircle
 );
 
 export default function App() {

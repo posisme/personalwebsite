@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import axios, { all } from 'axios';
 import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const url = 'https://posis.me/api/picture';
 
@@ -18,6 +18,7 @@ const SinglePic = () =>{
     const [person, setPerson] = useState(searchParams.get('person')||null);
     const [filename, setFilename] = useState(searchParams.get('picture'));
     const [people, setPeople] = useState("");
+    const [editPeople, setEditPeople] =useState(false);
     const [allpeople,setAllPeople]=useState([]);
     
     useEffect(()=>{
@@ -129,39 +130,48 @@ const SinglePic = () =>{
             <Layout />
             <main className="main">
                 <div className="main__wrapper wrapper pictures__wrapper">
-                    <h2 className="main__heading">Picture</h2>
+                    <h2 className="pictures__heading">Picture</h2>
                     <button onClick={()=>{window.location = buttonreturn}}>Back</button>
                     {/* <PeopleForm filename={filename} people={people} allpeople={allpeople} /> */}
-                    <form className="main__peopleform" onSubmit={handleSubmit}>
-            <div>Who is in this photo?</div>
-            <ul className="main__peoplelist">
+                    
                 
-                {
+                {editPeople ? (
+                    <form className="pictures__peopleform" onSubmit={handleSubmit}>
+                    <div>Who is in this photo?</div>
+                <ul className="pictures__peoplelist">
+                    
+                    {
+                    
+                    allpeople.map((o,index)=>{
+                        console.log(allpeople)
+                        return(<li key={index}>
+                            <input 
+                                type="checkbox"
+                                id={`taggedPeople-${index}`}
+                                name={`taggedPeople-${index}`}
+                                value={o}
+                                onChange={checkhandleChange} 
+                                checked={checkedPeople.includes(o)}
+                            /> 
+                            <label htmlFor={`taggedPeople-${index}`}>{o}</label>
+                        </li>)
+                    })
+                    }
                 
-                allpeople.map((o,index)=>{
-                    console.log(allpeople)
-                    return(<li key={index}>
-                        <input 
-                            type="checkbox"
-                            id={`taggedPeople-${index}`}
-                            name={`taggedPeople-${index}`}
-                            value={o}
-                            onChange={checkhandleChange} 
-                            checked={checkedPeople.includes(o)}
-                        /> 
-                        <label htmlFor={`taggedPeople-${index}`}>{o}</label>
-                    </li>)
-                })
-                }
+                </ul>
             
-            </ul>
             <label htmlFor="whoBox">Who else is in this photo?</label>
             <textarea id="whoBox" name="whoBox" onChange={whoboxhandleChange} value={otherpeople}></textarea>
             <button id="submit">Update</button>
-        </form>
+        </form>):null}
+                <div className="picture__container">
+                    <button 
+                        onClick={()=>setEditPeople(!editPeople)}
+                        className="pictures__editbutton"
+                    >{editPeople?<FontAwesomeIcon icon="fas fa-times-circle" />:<FontAwesomeIcon icon="fas fa-edit" />}</button>
                     {picture}
                     {/* {deets} */}
-                    
+                </div>
                 </div>
             </main>
             <Footer />

@@ -48,3 +48,18 @@
         
     }
 }
+.pictures{
+    &__heading{}
+    &__peoplelist{
+        height:200px;
+        overflow-y: scroll;
+    }
+    &__container{
+        position:relative;
+    }
+    &__editbutton{
+        background-color: transparent;
+        color:black;
+        position:absolute;
+    }
+}
