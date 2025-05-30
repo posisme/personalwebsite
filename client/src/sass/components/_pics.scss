@@ -62,6 +62,20 @@
         justify-content: space-around;
         
     }
+    &__selectpics{
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:10px;
+        padding:3px;
+        @include u.breakpoint(large){
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+    &__selectorlabel{
+        display:flex;
+        align-items: center;
+        box-sizing: border-box;
+    }
 }
 .pictures{
     &__heading{}

@@ -120,14 +120,13 @@ app.get("/rebuildpics", async (req,res)=>{
 
 app.get("/pictures", async (req, res) => {
     var sql = "select *, Max(case when key = 'fav' and val = 'true' then 'true' else 'false' end) as fav, group_concat(personid) as people from pics left join picspeople on picid = filename left join pics_xtra using(filename)";
-    var totalsql = "select count(*) as count from pics";
+
     var sqlp = [];
     var wherec = [];
     var havingc = [];
     if(req.query.person){
-        wherec.push("personid = ?");
-        totalsql = totalsql + " left join picspeople on picid = filename where personid = ?";
-        sqlp.push(req.query.person);
+        wherec.push("personid IN ("+req.query.person.split(",").map(()=>"?").join(", ")+")");
+        sqlp.push(...req.query.person.split(","));
     }
     if(req.query.authtf && req.query.authtf == "false"){
         havingc.push("fav = 'true'")
@@ -135,7 +134,9 @@ app.get("/pictures", async (req, res) => {
     sql = sql + (wherec.length > 0?" WHERE "+ wherec.join(" and "):"");
     sql += " group by filename ";
     sql = sql + (havingc.length > 0?" HAVING " + havingc.join(" and "):"");
-    sql += " order by fav DESC, date desc  limit "+req.query.max_rows+" offset "+req.query.offset;
+    sql += " order by fav DESC, date desc  "
+    var total = await dbrun(sql,sqlp,"select")
+    sql = sql + "limit "+req.query.max_rows+" offset "+req.query.offset;
     
     var listiles = await dbrun(sql,sqlp,"select");
     
@@ -143,12 +144,13 @@ app.get("/pictures", async (req, res) => {
         return {filename:f.filename,data:{people:f.people,fav:f.fav}}
     });
     
-    var total = await dbrun(totalsql,sqlp,"select")
+    let allpeeps = await dbrun("select distinct personid, count(personid) as ct from picspeople group by personid order by ct desc",[],"select")
     
     res.json({
         count:15,
+        allpeeps:allpeeps,
         offset:req.query.offset,
-        total:total[0].count,
+        total:total.length,
         //total:100,
         files:listiles
     });

@@ -49,7 +49,7 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/videos" element={<Videos />} />
             <Route path="/pictures" element={<Pictures authtf="true"/>} />
-            <Route path="/pic" element={<SinglePic authtf="false"/>} />
+            <Route path="/pic" element={<SinglePic authtf="true"/>} />
             <Route path="/writing" element={<Writing doc=""/>} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meals" element={<Meals />} />

@@ -13,15 +13,18 @@ const Pictures = ({authtf}) =>{
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [offset, setOffset] = useState(searchParams.get('offset')||0);
-    const [person, setPerson] = useState(searchParams.get('person')||null);
+    const [person, setPerson] = useState(searchParams.get('person')?searchParams.get('person').split(","):null);
     const [auth, setAuth] = useState(authtf);
     console.log("AUTH",authtf)
+
+    
     return (
         <>
             <Layout />
             <main className="main">
                 <div className="main__wrapper wrapper pictures__wrapper">
                     <h2 className="main__heading">Pictures</h2>
+                    
                     <PicList offset={offset} person={person} authtf={authtf}/>
                     
                 </div>
@@ -34,10 +37,15 @@ const Pictures = ({authtf}) =>{
 
 
 const PicList = (props)=>{
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
     const [piclist,setPiclist] = useState(null);
     const [offset,setOffset]= useState(parseInt(props.offset));
     const [person,setPerson]= useState(props.person);
     const [totalpics,setTotal] = useState(0);
+    const [allpeeps,setAllPeeps] = useState([]);
+    const [searchpeeps, setSearchpeeps] = useState(searchParams.get('person')?searchParams.get('person').split(","):[]);
+    const [expandsearch, setExpandsearch] = useState(false);
     const [authtf,setAuthtf] = useState(props.authtf)
     
     
@@ -47,7 +55,14 @@ const PicList = (props)=>{
     const handleOffsetChange = (newOffset) =>{
         setOffset(newOffset); 
     }
-    
+    const handleSelect = (e) =>{
+        if(e.target.checked == true)
+            setSearchpeeps([...searchpeeps,e.target.value]);
+        else
+            setSearchpeeps(searchpeeps.filter(item => item !== e.target.value))
+        
+        return e.target.value;
+    }
     
     
     useEffect((props)=>{
@@ -63,6 +78,7 @@ const PicList = (props)=>{
                 var pics = [];
                 if(result && result.data){
                     setTotal(result.data.total-maxrows);
+                    
                     result.data.files.forEach(function(p,index){
                         var src="/pics/"+p.filename;
                         pics.push(<div className="pics__picturegroup" 
@@ -77,8 +93,10 @@ const PicList = (props)=>{
                                   </div>
                         );
                     })
+                    setAllPeeps(result.data.allpeeps);
                 }
                 setPiclist(pics);
+                
                 
                 
             }).catch((err)=>{
@@ -93,8 +111,16 @@ const PicList = (props)=>{
         }
     }, [offset]);
 
+    const handleSearchClick = () =>{
+        window.location = window.location.origin + window.location.pathname + "?person="+searchpeeps.join(",")
+        return true;
+    }
     
-    
+    const handleSearchShow = (e) =>{
+        setExpandsearch(prevExpandSearch => !prevExpandSearch);
+        console.log(!expandsearch); // Log the new state after toggling
+    }
+    const allpeepsmap = expandsearch ? allpeeps : allpeeps.slice(0, 10);
     return (
         <>
         
@@ -109,6 +135,29 @@ const PicList = (props)=>{
         </div>
        <input type="hidden" id="currlist" value={"{offset:"+offset+",person:"+person+"}"}/>
        <div>{props.authtf=="true"?<LoadLink />:<a href='/login'>Log in to see all pictures</a>}</div>
+       <div className="pics__selectpics">
+        
+                        {
+                        allpeepsmap.map((p)=>(
+                                <><label className="pics__selectorlabel" htmlFor={"pics__selector-"+p.personid}>{p.personid}
+
+                                <input 
+                                    type="checkbox" 
+                                    className="pics__selector" 
+                                    onChange={handleSelect}
+                                    value={p.personid}
+                                    checked={searchpeeps.includes(p.personid)}
+                                    id={"pics__selector-"+p.personid}
+                                /></label></>
+                            )
+                        )}
+        </div>
+        <div><a onClick={handleSearchShow}>Show {expandsearch? "less...":"more..."}</a></div>
+        
+        <button 
+            onClick={handleSearchClick}
+        >Search Pics</button>
+                    
        
         </>
     );
