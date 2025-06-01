@@ -143,8 +143,11 @@ app.get("/pictures", async (req, res) => {
     listiles = listiles.map((f)=>{
         return {filename:f.filename,data:{people:f.people,fav:f.fav}}
     });
-    
-    let allpeeps = await dbrun("select distinct personid, count(personid) as ct from picspeople group by personid order by ct desc",[],"select")
+    let allpeepssql = "select distinct personid, count(personid) as ct from picspeople group by personid order by ct desc";
+    if(req.query.authtf && req.query.authtf == "false"){
+        allpeepssql = 'select distinct personid, count(personid) as ct from pics_xtra join picspeople on picid = filename where key = "fav" and val = "true" group by personid order by ct desc';
+    }
+    let allpeeps = await dbrun(allpeepssql,[],"select");
     
     res.json({
         count:15,

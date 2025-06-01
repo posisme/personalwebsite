@@ -152,7 +152,7 @@ const PicList = (props)=>{
                             )
                         )}
         </div>
-        <div><a onClick={handleSearchShow}>Show {expandsearch? "less...":"more..."}</a></div>
+        {allpeeps.length > 10?<div><a onClick={handleSearchShow}>Show {expandsearch? "less...":"more..."}</a></div>:""}
         
         <button 
             onClick={handleSearchClick}
