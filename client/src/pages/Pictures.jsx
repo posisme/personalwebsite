@@ -47,6 +47,7 @@ const PicList = (props)=>{
     const [searchpeeps, setSearchpeeps] = useState(searchParams.get('person')?searchParams.get('person').split(","):[]);
     const [expandsearch, setExpandsearch] = useState(false);
     const [authtf,setAuthtf] = useState(props.authtf)
+    const [andorbool,setAndOrBool] = useState(searchParams.get('andorbool'));
     
     
     let maxrows = Utils.isMobile()?10:15;
@@ -69,7 +70,7 @@ const PicList = (props)=>{
         
         async function startFetch(){
             
-            var urlparams = ["authtf="+authtf,"offset="+offset,"max_rows="+maxrows];
+            var urlparams = ["authtf="+authtf,"offset="+offset,"max_rows="+maxrows,"andorbool="+andorbool];
             console.log(person)
             if(person){
                 urlparams.push("person="+encodeURIComponent(person));
@@ -112,7 +113,7 @@ const PicList = (props)=>{
     }, [offset]);
 
     const handleSearchClick = () =>{
-        window.location = window.location.origin + window.location.pathname + "?person="+searchpeeps.join(",")
+        window.location = window.location.origin + window.location.pathname + "?person="+searchpeeps.join(",")+"&andorbool="+andorbool
         return true;
     }
     
@@ -135,6 +136,17 @@ const PicList = (props)=>{
         </div>
        <input type="hidden" id="currlist" value={"{offset:"+offset+",person:"+person+"}"}/>
        <div>{props.authtf=="true"?<LoadLink />:<a href='/login'>Log in to see all pictures</a>}</div>
+       <div><button 
+        onClick = {()=>setAndOrBool(andorbool == "or" ? "and" : (andorbool == "and"? "or": "or"))}
+        className = {`toggle-button ${andorbool == "or" ? 'or': 'and'}`}
+       >
+        {andorbool == "or" ? (
+            <span className="label label--or">Or</span>
+        ) : (
+            <span className="label label--and">And</span>
+        )}
+       </button>
+       </div>
        <div className="pics__selectpics">
         
                         {

@@ -61,3 +61,23 @@ button{
     flex-direction: column;
 
 }
+.toggle-button{
+    background-color: #ddd;
+    transition: background-color 0.35s ease-in-out;
+    cursor: pointer;
+}
+.toggle-button .on {
+  background-color: green; /* Green color when ON - only used with this specific implementation (JS)*/
+}
+
+.toggle-button .label {
+  display: inline-block;
+  transition: transform 0.35s ease-in-out; /* Smoothly change the appearance of labels */
+}
+.toggle-button .label--and {
+  color: #4CAF50; /* Green text when ON (JS) */
+}
+
+.toggle-button .label--or {
+  color: red;    /* Red text for OFF state (JS) */
+}

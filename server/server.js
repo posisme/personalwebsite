@@ -119,15 +119,32 @@ app.get("/rebuildpics", async (req,res)=>{
 
 
 app.get("/pictures", async (req, res) => {
+    var andorbool = req.query.andorbool ? req.query.andorbool : "or";
     var sql = "select *, Max(case when key = 'fav' and val = 'true' then 'true' else 'false' end) as fav, group_concat(personid) as people from pics left join picspeople on picid = filename left join pics_xtra using(filename)";
 
     var sqlp = [];
     var wherec = [];
     var havingc = [];
     if(req.query.person){
-        wherec.push("personid IN ("+req.query.person.split(",").map(()=>"?").join(", ")+")");
-        sqlp.push(...req.query.person.split(","));
+        var sqlandor
+        
+        
+        if(andorbool == "or"){
+            sqlandor = "personid IN ("+req.query.person.split(",").map(()=>"?").join(", ")+")";
+            sqlp.push(...req.query.person.split(","));
+            wherec.push(sqlandor);
+        }
+        else{
+            sqlandor = req.query.person.split(",").map(()=>"people LIKE ?").join(" and ");
+            sqlp.push(...req.query.person.split(",").map((e)=>"%"+e+"%"));
+            havingc.push(sqlandor);
+        }
+        
+        
+        
     }
+    
+
     if(req.query.authtf && req.query.authtf == "false"){
         havingc.push("fav = 'true'")
     }
@@ -137,7 +154,7 @@ app.get("/pictures", async (req, res) => {
     sql += " order by fav DESC, date desc  "
     var total = await dbrun(sql,sqlp,"select")
     sql = sql + "limit "+req.query.max_rows+" offset "+req.query.offset;
-    
+    console.log(sql,sqlp);
     var listiles = await dbrun(sql,sqlp,"select");
     
     listiles = listiles.map((f)=>{
