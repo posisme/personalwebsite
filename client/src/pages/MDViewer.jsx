@@ -25,7 +25,7 @@ const MDViewer = ()=>{
     useEffect(()=>{
         console.log(doc);
         if(doc){
-            fetch("/api/mdviewer?doc="+doc)
+            fetch("/api/docs/mdviewer?doc="+doc)
                 .then(response => response.json())
                 .then(text => {
                     setMarkdown(text.file);
@@ -34,7 +34,7 @@ const MDViewer = ()=>{
                 .then(text => setPlainText(text.file))
         }
         else{
-            fetch("/api/mdviewer?filepath="+filepath)
+            fetch("/api/docs/mdviewer?filepath="+filepath)
                 .then(response => response.json())
                 .then(text => setDocList(text))
         }
@@ -50,7 +50,7 @@ const MDViewer = ()=>{
         setPlainText(e.target.value); // Update plaintext state
         setMarkdown(e.target.value);
     // Now, send the updated content to the API
-        fetch("/api/mdpost", {
+        fetch("/api/docs/mdpost", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",

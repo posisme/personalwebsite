@@ -183,7 +183,7 @@ const LoadLink = () =>{
         if(loading){
             return false;
         }
-        const response = await fetch("/api/rebuildpics");
+        const response = await fetch("/api/pictures/rebuildpics");
         if(response.ok){
             setLoading(false);
         }

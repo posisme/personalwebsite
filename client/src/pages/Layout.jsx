@@ -59,6 +59,7 @@ const NavPieces = ()=>{
     [
         {title:"Home",    link:"/"},
         {title:"About",   link:"/about"},
+        {title:"One Challenge",   link:"/onechallenge"},
         {title:"Pictures",link:"/pictures"},
         {title:"Videos",  link:"/videos"},
         {title:"Writing",  link:"/writing"},

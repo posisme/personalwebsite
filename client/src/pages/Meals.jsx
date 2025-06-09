@@ -20,7 +20,7 @@ const Meals = () => {
             [name]: checked,
         }));
         var senditems = {...checkedItems,[name]: checked};
-        fetch("/api/groceryupdate", {
+        fetch("/api/meals/groceryupdate", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
@@ -39,7 +39,7 @@ const Meals = () => {
             });
     };
     const fetchgrocerylist=async () =>{
-            const res = await fetch("/api/grocerylist");
+            const res = await fetch("/api/meals/grocerylist");
             if(!res.ok){
                 throw new Error('OOPS');
             }

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const url = 'https://posis.me/api/picture';
+const url = 'https://posis.me/api/pictures/picture';
 
 
 const SinglePic = ({authtf}) =>{
@@ -124,14 +124,14 @@ const SinglePic = ({authtf}) =>{
         let formData = Object.fromEntries(new FormData(e.target));
         formData.filename = filename;
         console.log("FORMDATA",formData);
-        axios.post("/api/updatepics", formData).then((response) => {
+        axios.post("/api/pictures/updatepics", formData).then((response) => {
             console.log("FORMRESPO",response);
         });
     };
     const toggleFavorite = () =>{
         
         
-        fetch("/api/picfav?filename="+filename+"&fav="+!editFavorite)
+        fetch("/api/pictures/picfav?filename="+filename+"&fav="+!editFavorite)
             .then((res)=>{
                 console.log(res);
             })

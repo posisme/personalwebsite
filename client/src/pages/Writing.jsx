@@ -73,7 +73,7 @@ const Writing = ()=>{
 const Doclist = () =>{
     const [doceles, setDocEls] = useState('');
     useEffect(()=>{
-        fetch("/api/getdocs").then(response => response.text()).then((text)=>{
+        fetch("/api/docs/getdocs").then(response => response.text()).then((text)=>{
             text = JSON.parse(text);
             console.log(text);
             var alleles = [];

@@ -15,15 +15,17 @@ import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
 import Meals from "./pages/Meals";
 import MDViewer from "./pages/MDViewer";
+import OneChallenge from "./pages/OneChallenge";
 import "./sass/styles.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faTwitter, faInstagram, faVimeo, faFontAwesome } from '@fortawesome/free-brands-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faFolder,
   faFile,
   faEdit,
   faTimesCircle,
-  faStar
+  faStar,
 } from '@fortawesome/free-solid-svg-icons'; // Import specific solid icons
 
 // Add the imported icons to the library
@@ -32,7 +34,11 @@ library.add(
   faFile,
   faEdit,
   faTimesCircle,
-  faStar
+  faStar,
+  faFacebook,
+  faInstagram,
+  faTwitter,
+  faVimeo
 );
 
 export default function App() {
@@ -54,6 +60,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meals" element={<Meals />} />
             <Route path="/mdviewer" element={<MDViewer />} />
+            <Route path="/onechallenge" element={<OneChallenge />} />
             
             
             <Route path="*" element={<NoPage />} />
@@ -75,6 +82,7 @@ export default function App() {
           <Route path="/meals" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/mdviewer" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/login" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
+          <Route path="/onechallenge" element={<OneChallenge />} />
 
         </Routes>
       </BrowserRouter>
