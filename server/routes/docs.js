@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router();
 const fs = require('fs');
 const basedocsdir = process.env.BASEDOCDIR;
-
+const basemddir = process.env.BASEMDDIR;
 
 router.get("/getdocs",async (req,res)=>{
     var docs = await getDocs();

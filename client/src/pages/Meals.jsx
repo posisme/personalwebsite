@@ -12,6 +12,7 @@ const Meals = () => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date(new Date().setDate(new Date().getDate()+7)));
+    const [inventorytoggle,setInventory] = useState(true);
 
     const handleCheckBoxChange = async (e) => {
         const { name, checked } = e.target;
@@ -85,7 +86,8 @@ const Meals = () => {
     const ReloadWindow = () =>{
         fetchgrocerylist();
     }
-    const gapikey = "AKfycbzGO9AfRC4VvRQN4vTyKnsdG6BBYx4zoBb84VC-3YUqGJY7WukwjzxNJDA13x362MocYA"
+    
+    const gapikey = "AKfycbxoQno60e5TyKp0gcZUnBVubW1a0BcN_NOSmQBWDjALBZEoAl9Y3eKJfzOAtjs3Zw_THA"
     return (
         <>
             <Layout />
@@ -117,9 +119,13 @@ const Meals = () => {
                         />&nbsp;&nbsp;End Date:<DatePicker 
                             selected={endDate} 
                             onChange={(date) => setEndDate(date)} 
-                        /></p>
+                        />
+                        <button 
+                            onClick={()=>setInventory(!inventorytoggle)}
+                        >{inventorytoggle?"Use Inventory":"Don't Use Inventory"}</button>
+                        </p>
                         <a 
-                            href={"https://script.google.com/macros/s/"+gapikey+"/exec?st="+startDate+"&et="+endDate} 
+                            href={"https://script.google.com/macros/s/"+gapikey+"/exec?st="+startDate+"&et="+endDate+"&inventory="+(inventorytoggle?"inv":"noinv")} 
                             target="_blank">Make new JSON</a>
                     </div>
                 </div>

@@ -1,8 +1,22 @@
 @use "../util" as u;
 .main {
-    
     margin:0;
     padding:0;
+    @include u.breakpoint(large){
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 0;
+        padding-right:0;
+        padding-top:0;
+        padding-bottom:2rem;
+    }
+    
+    
+    background: var(--inset-color);
+    
+    
 
     &__headshot {
         width:200px;
@@ -25,7 +39,7 @@
             flex-direction: row;
             flex-wrap: nowrap;
         }
-        color:var(--main-text-color);
+        color:var(--inset-textcolor);
         a {
             color:var(--link-text-color)
         }

@@ -34,6 +34,41 @@ const Utils = {
         loginmessage
       };
     },
+    yMD: (startdate,enddate) =>{
+      var retarr = [];
+      let years,months,days;
+      var startdate = new Date(startdate);
+      var today = new Date(enddate?enddate:new Date());
+      if(startdate < today){
+        years = today.getFullYear() - startdate.getFullYear();
+        months = today.getMonth() - startdate.getMonth();
+        days = today.getDate() - startdate.getDate();
+        
+      }
+      else{
+        years = startdate.getFullYear() - today.getFullYear();
+        months = startdate.getMonth() - today.getMonth();
+        days = startdate.getDate() - today.getDate();
+      }
+      if(days < 0){
+            const lastMonth = new Date(today.getFullYear(),today.getMonth(),0);
+            days += lastMonth.getDate();
+            months--;
+        }
+        if(months < 0){
+            months += 12;
+            years--;
+        }
+      
+      var ret =  [
+        years>1?years + " years":(years == 1?years + " year":null),
+        months>1?months + " months":(months == 1?months + " month":null),
+        days>1?days + " days":(days == 1? days + " day":null),
+      ].filter((j)=>j != null);
+      var last = ret.pop();
+      return ret.join(", ")+" and "+ last;
+      
+    },
     levenshteinDistance: (s1,s2) =>{
       const m = s1.length;
       const n = s2.length;

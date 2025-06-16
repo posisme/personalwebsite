@@ -1,9 +1,10 @@
 import Layout from "./Layout";
 import Footer from "./Footer";
+import Utils from "../utils/Utils";
 import familypic from "../images/randykidsgreentree.jpg"
 import uspic from "../images/randykimwaterfall.jpg"
 const About = ()=>{
-    const ocyear = new Date("09-01-2028");
+    const ocyear = new Date(2028,8,1,0,0,0,0);
     return (
         <>
             <Layout />
@@ -32,11 +33,10 @@ const About = ()=>{
                     </p>
                     <p className="main__hometext">I've always been a tech-geek, and after facing some challenges in ministry and wanting 
                         to stay closer to Iowa, I took at job at <a href='https://www.leepfrog.com'>Leepfrog Technologies</a>. I've been 
-                        there {parseInt(Math.floor(new Date() - new Date("2013-06-10") )/1000/60/60/24/365)} years.
+                        there {Utils.yMD(new Date(2013,5,10,8,0,0,0))}.
                     </p>
                     <p className="main__hometext">In {ocyear.getFullYear()}, which is 
-                        just {parseInt(Math.floor(ocyear - new Date())/1000/60/60/24/7)} weeks 
-                        away, we plan to move to Berlin, Germany to begin working as missionaries 
+                        just {Utils.yMD(ocyear)} away, we plan to move to Berlin, Germany to begin working as missionaries 
                         with <a href='https://onechallenge.org'>One Challenge</a>.
                     </p>
                     <p className="main__hometext">I'm not much of a social media person, but here are my links:</p>
