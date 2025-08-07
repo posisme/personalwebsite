@@ -46,6 +46,9 @@
         &__content{
             columns:2;
             column-gap:1in;
+            .hidden_print{
+                display:none;
+            }
         }
         &__content::after{
             content:" ";

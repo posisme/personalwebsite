@@ -5,7 +5,7 @@ import ocialtlogo from "../images/OCI-alt-logo-in-color-1500px.png"
 import ocqrcode from "../images/giving-qrcode.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {useRef, useEffect,useState} from 'react';
-
+import Utils from "../utils/Utils";
 
 const OneChallenge = ()=>{
     const [campaigns, setData] = useState(null);
@@ -43,6 +43,7 @@ const OneChallenge = ()=>{
   return (
         <>
             <Layout />
+            
             <main className="onechallenge">
                 <div className="wrapper onechallenge__wrapper">
                     <header className="onechallenge__header">
@@ -59,6 +60,7 @@ const OneChallenge = ()=>{
                             </ul>
                         </menu>
                     </header>
+                  <article><h2>Countdown to Berlin</h2><p>Randy and Kim plan to move to Germany to build relationships, help the local church, and coordinate short-term mission trips in <strong>{Utils.yMD(new Date("09-01-2028"))}</strong>!</p></article>
                     <article>
                         <h2 className="onechallenge__newsletterheader">Latest Newsletters from the Pospisil's</h2>
                         <ul className="onechallenge__newsletterlist">

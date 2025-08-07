@@ -76,6 +76,22 @@
         align-items: center;
         box-sizing: border-box;
     }
+    &__tags{
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    &__tag{
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        flex-direction: column;
+        &icon{
+            font-size:2rem;
+        }
+        &label{
+            
+        }
+    }
 }
 .pictures{
     &__heading{}

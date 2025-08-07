@@ -44,10 +44,12 @@ const PicList = (props)=>{
     const [person,setPerson]= useState(props.person);
     const [totalpics,setTotal] = useState(0);
     const [allpeeps,setAllPeeps] = useState([]);
+    const [alltags,setAllTags] = useState([]);
     const [searchpeeps, setSearchpeeps] = useState(searchParams.get('person')?searchParams.get('person').split(","):[]);
     const [expandsearch, setExpandsearch] = useState(false);
     const [authtf,setAuthtf] = useState(props.authtf)
     const [andorbool,setAndOrBool] = useState(searchParams.get('andorbool'));
+    const [currtag, setCurrTag] = useState(searchParams.get('tags') ? searchParams.get('tags') : "");
     
     
     let maxrows = Utils.isMobile()?10:15;
@@ -75,13 +77,16 @@ const PicList = (props)=>{
             if(person){
                 urlparams.push("person="+encodeURIComponent(person));
             }
+            if(currtag){
+                urlparams.push("tags="+encodeURIComponent(currtag));
+            }
             axios.get(url+"?"+urlparams.join("&")).then((result)=>{
                 var pics = [];
                 if(result && result.data){
                     setTotal(result.data.total-maxrows);
                     
                     result.data.files.forEach(function(p,index){
-                        var src="/pics/"+p.filename;
+                        var src="/pics/thumbs/"+p.filename;
                         pics.push(<div className="pics__picturegroup" 
                                         onClick={()=>{window.location = "/pic?picture="+p.filename+"&"+urlparams.join("&")}}>
                                     <img className="pics__picture"  
@@ -95,6 +100,7 @@ const PicList = (props)=>{
                         );
                     })
                     setAllPeeps(result.data.allpeeps);
+                    setAllTags(result.data.alltags);
                 }
                 setPiclist(pics);
                 
@@ -120,6 +126,11 @@ const PicList = (props)=>{
     const handleSearchShow = (e) =>{
         setExpandsearch(prevExpandSearch => !prevExpandSearch);
         console.log(!expandsearch); // Log the new state after toggling
+    }
+    const handleTagShow = (e) =>{
+        setCurrTag(e.currentTarget.id);
+        window.location = window.location.origin + window.location.pathname + "?tags=" + e.currentTarget.id;
+        return true;
     }
     const allpeepsmap = expandsearch ? allpeeps : allpeeps.slice(0, 10);
     return (
@@ -169,7 +180,24 @@ const PicList = (props)=>{
         <button 
             onClick={handleSearchClick}
         >Search Pics</button>
-                    
+            <h2>Tags</h2>
+        <div className="pics__tags">
+            
+{
+    alltags.map((p)=>(
+        <>
+            <button 
+                className="pics__tag"
+                onClick={handleTagShow}
+                id={p.tags}
+            >
+                <FontAwesomeIcon className="pics__tagicon" icon="fa-folder" />
+                <div className="pics__taglabel">{p.tags}</div>
+            </button>
+        </>
+    ))
+}
+        </div>
        
         </>
     );
@@ -178,9 +206,22 @@ const PicList = (props)=>{
 
 const LoadLink = () =>{
     const [loading, setLoading] = useState(false);
+    const [howmany,setHowmany] = useState({running:"0 of unknown"});
     const rebuildpics = async (props)=>{
         setLoading(true);
         if(loading){
+            const waitingresp = await fetch("/api/pictures/isrebuildrunning");
+            if(waitingresp.ok){
+                var hm = await waitingresp.json();
+                setHowmany(hm);
+                
+                if(hm.running === false){
+                    setLoading(false);
+                }
+                else{
+                    setLoading(true);
+                }
+            }
             return false;
         }
         const response = await fetch("/api/pictures/rebuildpics");
@@ -189,7 +230,7 @@ const LoadLink = () =>{
         }
     }
     return (
-        <Link loading={loading} id="rebuildpicslink" disabled={loading} onClick={() => rebuildpics()}>{loading ? 'Rebuilding, please wait...': 'Rebuild pics'}</Link>
+        <Link loading={loading} id="rebuildpicslink" onClick={() => rebuildpics()}>{loading ? howmany.running: 'Rebuild pics'}</Link>
     )
 }
 
