@@ -9,9 +9,11 @@ const path = require('path');
 const fs = require('fs');
 const basemealsdir = process.env.BASEMEALSDIR;
 
+
 router.post("/",(req,res)=>{
     var meals = req.body;
     fs.writeFileSync(basemealsdir+"grocerylist.json",JSON.stringify(meals));
+    console.log("Here")
     res.json(meals);
 })
 router.get("/grocerylist",(req,res)=>{
@@ -26,6 +28,7 @@ router.get("/grocerylist",(req,res)=>{
         res.json(dataj)
     })
 })
+
 // app.get("/mailchimp",async (req,res)=>{
 //     res.json(await getCampaigns());
 // })
@@ -34,6 +37,15 @@ router.post("/groceryupdate",(req,res)=>{
     res.json(req.body)
 })
 
+router.post("/groceryadd",(req,res)=>{
+    let curr = JSON.parse(fs.readFileSync(basemealsdir + "grocerylist.json"));
+    
+    req.body.values.forEach((f)=>{
+        curr.list[f]= "false"
+    })
+    fs.writeFileSync(basemealsdir + "grocerylist.json",JSON.stringify(curr));
+    res.json(JSON.stringify(curr));
+})
 
 
 

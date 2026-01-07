@@ -1,4 +1,45 @@
 import { useState } from 'react';
+import { h } from 'hastscript';
+import { map } from 'unist-util-map';
+
+const mdredo = () => {
+
+  const isDirectiveNode = (node) => {
+    const { type,name } = node;
+    if(name && name.match(/^[0-9]/)){
+      return false;
+    }
+    return type === 'textDirective' || type === 'leafDirective' || type === 'containerDirective';
+  };
+  const mapDirectiveNode = (node) => {
+    
+    if (isDirectiveNode(node)) {
+      const { properties, tagName } = h(node.name, node.attributes);
+      return Object.assign(Object.assign({}, node), {
+        data: {
+          hName: tagName,
+          hProperties: properties
+        }
+      });
+    }
+    if (node.name && node.name.match(/^[0-9]/)) {
+      let newnode = {
+        type:"text",
+        value:":"+node.name,
+        position:node.position
+      }
+      return newnode;
+    }
+    return node;
+  };
+  
+  const transformNodeTree = (nodeTree) => map(nodeTree, mapDirectiveNode);
+  const remarkDirectiveRehype = () => transformNodeTree;
+  
+  
+  return remarkDirectiveRehype();
+  }
+
 const Utils = {
 
 
@@ -92,7 +133,11 @@ const Utils = {
           }
       }
       return dp[m][n];
-    }
+    },
+    remarkDirectiveRehype:mdredo
 };
+
+
+
 
 export default Utils;

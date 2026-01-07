@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 import Markdown from 'react-markdown';
 import { useRef, forwardRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import remarkDirective from "remark-directive";
+//import remarkDirectiveRehype from "remark-directive-rehype";
 import rehypeRaw from 'rehype-raw';
 import rehypeSanitize ,{ defaultSchema } from 'rehype-sanitize';
-
-
+import Utils from "../utils/Utils";
 
 
 const Writing = ()=>{
@@ -42,7 +43,22 @@ const Writing = ()=>{
   },
 
 };
-    
+    const printHidden = ({ children, type }) => {
+        
+        return (
+            <div className="print__hidden">
+            {children}
+            </div>
+        );
+    };
+    const skipDirective = (h)=>{
+        return (<>:{h.node.tagName}</> )
+    }
+    const numbercomponents = (()=>{
+        var ret = {};
+        ret.print_hidden = printHidden;
+        return ret;
+    })()
     return (
         <>
             <Layout />
@@ -56,7 +72,20 @@ const Writing = ()=>{
                 <button onClick={()=>handlePrint(reactToPrintContent)}>Print</button>
                 <div className="writing__print" ref={componentRef}>
                     <div className="writing__content">
-                        <Markdown rehypePlugins={[rehypeRaw,rehypeSanitize(customSchema)]}>{markdown}</Markdown>
+                                <Markdown 
+                                    children={markdown}
+                                    remarkPlugins={[
+                                        remarkDirective,
+                                        Utils.remarkDirectiveRehype
+                                    ]} 
+                                    components={numbercomponents}
+                                    rehypePlugins={[
+                                        rehypeRaw,
+                                        rehypeSanitize(customSchema)
+                                    ]}
+                                >
+                                    {markdown}
+                                </Markdown>
                     </div>
                 </div>
                 </article>
