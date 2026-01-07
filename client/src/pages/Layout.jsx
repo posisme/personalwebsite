@@ -54,7 +54,7 @@ const Hamburger = ({toggleMenu}) =>{
 }
 const NavPieces = ()=>{
     var location = useLocation();
-    console.log(location);
+    //console.log(location);
     var items = [];
     [
         {title:"Home",    link:"/"},
@@ -63,6 +63,7 @@ const NavPieces = ()=>{
         {title:"Pictures",link:"/pictures"},
         {title:"Videos",  link:"/videos"},
         {title:"Writing",  link:"/writing"},
+        {title:"Reading",  link:"/reading"},
         {title:"Menu",   link:"/meals"},
         {title:"MDViewer", link:"/mdviewer"}
     ].forEach((item)=>{

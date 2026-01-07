@@ -10,6 +10,7 @@ import Videos from "./pages/Videos";
 import Pictures from "./pages/Pictures";
 import SinglePic from "./pages/SinglePic";
 import Writing from "./pages/Writing";
+import Reading from "./pages/Reading";
 import Dashboard from "./pages/Dashboard";
 import NoPage from "./pages/NoPage";
 import Login from "./pages/Login";
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/pictures" element={<Pictures authtf="true"/>} />
             <Route path="/pic" element={<SinglePic authtf="true"/>} />
             <Route path="/writing" element={<Writing doc=""/>} />
+            <Route path="/reading" element={<Reading />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/meals" element={<Meals />} />
             <Route path="/mdviewer" element={<MDViewer />} />
@@ -79,6 +81,7 @@ export default function App() {
           <Route path="/pictures" element={<Pictures authtf="false"/>} />
           <Route path="*" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/writing" element={<Writing doc=""/>} />
+          <Route path="/reading" element={<Reading />} />
           <Route path="/meals" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/mdviewer" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
           <Route path="/login" element={<Login loginmessage={loginmessage} setToken={setToken}/>} />
