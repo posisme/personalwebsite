@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-client 
 # RUN apt-get install screen -y
 RUN mkdir -p /root/.ssh
 COPY personal-site-docker-github /root/.ssh/personal-site-docker-github
-COPY personal-site-docker-github.pub /root/.ssh/authorized_keys
+RUN ssh-keygen -y -f personal-site-docker-github > /root/.ssh/authorized_keys
 
 RUN chmod 400 /root/.ssh/personal-site-docker-github
 RUN chmod 600 /root/.ssh/authorized_keys
