@@ -19,16 +19,16 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ../Pictures
+      device: /data/photoupload/upload
   writing_docs:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../writing_docs
+      device: /home/randy/obsidian/writing_docs/
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ../personalsitedata/db
+      device: /home/randy/personalsitedata/db

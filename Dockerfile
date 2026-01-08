@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends openssh-client 
 # RUN apt-get install screen -y
 RUN mkdir -p /root/.ssh
 COPY personal-site-docker-github /root/.ssh/personal-site-docker-github
-RUN ssh-keygen -y -f personal-site-docker-github > /root/.ssh/authorized_keys
+RUN ssh-keygen -y -f /root/.ssh/personal-site-docker-github > /root/.ssh/authorized_keys
 
 RUN chmod 400 /root/.ssh/personal-site-docker-github
 RUN chmod 600 /root/.ssh/authorized_keys
@@ -14,14 +14,12 @@ COPY githubhostkeys.txt /root/.ssh/known_hosts
 WORKDIR /usr/app
 
 RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/personal-site-docker-github" git clone git@github.com:posisme/personalwebsite.git /usr/app
-RUN git checkout feature/pick-person-interface
-RUN cp nginx.conf /etc/nginx/sites-available/reverse-proxy
-RUN ls /usr/app
+RUN git checkout main
 
-EXPOSE 80
-EXPOSE 22
-# EXPOSE 3000
-# EXPOSE 6125
+# EXPOSE 80
+#EXPOSE 22
+EXPOSE 3000
+EXPOSE 6125
 
 
 RUN chmod +x /usr/app/startupscript.sh
