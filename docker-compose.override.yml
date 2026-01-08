@@ -1,7 +1,0 @@
-services:
-  web:
-    image: personalsite-web-dev
-    container_name: personalsite-web-dev
-    ports:
-     - "80:80"
-     - "2222:22"
