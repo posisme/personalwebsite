@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:23
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-client nginx screen openssh-server
 
 # RUN apt-get install screen -y
@@ -15,6 +15,8 @@ WORKDIR /usr/app
 
 RUN GIT_SSH_COMMAND="ssh -i /root/.ssh/personal-site-docker-github" git clone git@github.com:posisme/personalwebsite.git /usr/app
 RUN git checkout main
+RUN mkdir /usr/app/client/src/jsonfiles
+RUN echo '{"st":"","et":"","list":{}}' > /usr/app/client/src/jsonfiles/grocerylist.json
 
 # EXPOSE 80
 #EXPOSE 22
