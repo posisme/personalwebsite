@@ -112,8 +112,6 @@ app.use("/meals", meals);
 const pictures = require("./routes/pictures");
 app.use("/pictures", pictures);
 
-const reading = require("./routes/reading");
-app.use("/reading", reading);
 
 const docs = require("./routes/docs");
 app.use("/docs", docs);
