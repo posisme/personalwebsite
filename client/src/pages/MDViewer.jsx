@@ -6,26 +6,27 @@ import Markdown from 'react-markdown';
 import { useRef, forwardRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import rehypeRaw from 'rehype-raw';
-import rehypeSanitize ,{ defaultSchema } from 'rehype-sanitize';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
-const MDViewer = ()=>{
+const MDViewer = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [doc, setDoc] = useState(searchParams.get('doc'));
     const [markdown, setMarkdown] = useState('');
     const [plaintext, setPlainText] = useState('');
     const [doclist, setDocList] = useState('');
-    const [filepath, setFilePath]=useState(searchParams.get('filepath'));
+    const [filepath, setFilePath] = useState(searchParams.get('filepath'));
+    const [showEdit, setShowEdit] = useState(false);
     const componentRef = useRef();
-    
-    
-    
-    useEffect(()=>{
+
+
+
+    useEffect(() => {
         console.log(doc);
-        if(doc){
-            fetch("/api/docs/mdviewer?doc="+doc)
+        if (doc) {
+            fetch("/api/docs/mdviewer?doc=" + doc)
                 .then(response => response.json())
                 .then(text => {
                     setMarkdown(text.file);
@@ -33,14 +34,14 @@ const MDViewer = ()=>{
                 })
                 .then(text => setPlainText(text.file))
         }
-        else{
-            fetch("/api/docs/mdviewer?filepath="+filepath)
+        else {
+            fetch("/api/docs/mdviewer?filepath=" + filepath)
                 .then(response => response.json())
                 .then(text => setDocList(text))
         }
-    },[]);
+    }, []);
 
-    const reactToPrintContent = () =>{
+    const reactToPrintContent = () => {
         return componentRef.current;
     }
     const handlePrint = useReactToPrint({
@@ -49,59 +50,60 @@ const MDViewer = ()=>{
     const handleMDEdits = (e) => {
         setPlainText(e.target.value); // Update plaintext state
         setMarkdown(e.target.value);
-    // Now, send the updated content to the API
+        // Now, send the updated content to the API
         fetch("/api/docs/mdpost", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ filename:doc,content: e.target.value }) // Send the updated content
+            body: JSON.stringify({ filename: doc, content: e.target.value }) // Send the updated content
         })
-        .then(response => {
-            if (!response.ok) {
-                console.error("Failed to save Markdown:", response.statusText);
-            }
-            return response.json(); // Or handle response as needed
-        })
-        .catch(error => {
-            console.error("Error saving Markdown:", error);
-        });
-};
+            .then(response => {
+                if (!response.ok) {
+                    console.error("Failed to save Markdown:", response.statusText);
+                }
+                return response.json(); // Or handle response as needed
+            })
+            .catch(error => {
+                console.error("Error saving Markdown:", error);
+            });
+    };
     const customSchema = {
         ...defaultSchema,
         attributes: {
-            ...defaultSchema.attributes, 
-            '*': [...(defaultSchema.attributes['*'] || []), 'style'], 
+            ...defaultSchema.attributes,
+            '*': [...(defaultSchema.attributes['*'] || []), 'style'],
         },
     };
 
-    
-    
+
+
     return (
         <>
             <Layout size="small" />
-            {doclist? <Doclist doclist={doclist} filepath={filepath} />: ""}
+            {doclist ? <Doclist doclist={doclist} filepath={filepath} /> : ""}
             <main className="mdviewer">
                 <div className="wrapper mdviewer__wrapper">
-                
-                <article className={doc?"mdviewer__article":"hidden"}>
-                <button className="mdviewer__printbutton" onClick={()=>handlePrint(reactToPrintContent)}>Print</button>
-                <div className="mdviewer__edit">
-                    <textarea 
-                        className="mdviewer__editor"
-                        value={plaintext} 
-                        onChange={handleMDEdits}
-                    />
-                       
-                    </div>
-                <div className="mdviewer__print" ref={componentRef}>
-                    <div className="mdviewer__preview">
-                        <Markdown rehypePlugins={[rehypeRaw,rehypeSanitize(customSchema)]}>{markdown}</Markdown>
-                    </div>
+
+                    <article className={doc ? "mdviewer__article" : "hidden"}>
+                        <button className="mdviewer__printbutton" onClick={() => handlePrint(reactToPrintContent)}>Print</button>
+                        <button className="mdviewer__editbutton" onClick={() => setShowEdit(!showEdit)}>{showEdit ? "Hide Editor" : "Show Editor"}</button>
+                        <div className={showEdit ? "mdviewer__edit" : "hidden"}>
+                            <textarea
+                                className="mdviewer__editor"
+                                value={plaintext}
+                                onChange={handleMDEdits}
+                            />
+
+                        </div>
+                        <div className="mdviewer__print" ref={componentRef}>
+                            <div className={showEdit ? "mdviewer__preview" : "mdviewer__preview mdviewer__preview--full"}>
+                                <Markdown rehypePlugins={[rehypeRaw, rehypeSanitize(customSchema)]}>{markdown}</Markdown>
+                            </div>
+                        </div>
+                    </article>
                 </div>
-                </article>
-                </div>
-                
+
             </main>
             <Footer />
         </>
@@ -110,8 +112,8 @@ const MDViewer = ()=>{
 
 
 
-const Doclist = ({ doclist,filepath }) => {
-    filepath=filepath?filepath+"/":"";
+const Doclist = ({ doclist, filepath }) => {
+    filepath = filepath ? filepath + "/" : "";
     return (
         <>
             <ul>
@@ -119,22 +121,22 @@ const Doclist = ({ doclist,filepath }) => {
                     if (file.match(/\.md$/)) {
                         return (
                             <li key={file}>
-                                <a href={`/mdviewer?doc=${filepath?filepath:""}${file}`}>
+                                <a href={`/mdviewer?doc=${filepath ? filepath : ""}${file}`}>
                                     <FontAwesomeIcon icon="file" style={{ marginRight: '8px' }} />
                                     {file}
                                 </a>
                             </li>
                         );
                     }
-                    
+
                     return (
-                            <li key={file}>
-                                <a href={`/mdviewer?filepath=${file}`}>
-                                    <FontAwesomeIcon icon="folder" style={{ marginRight: '8px' }} />
-                                    {file}
-                                </a>
-                            </li>
-                        );
+                        <li key={file}>
+                            <a href={`/mdviewer?filepath=${file}`}>
+                                <FontAwesomeIcon icon="folder" style={{ marginRight: '8px' }} />
+                                {file}
+                            </a>
+                        </li>
+                    );
                 })}
             </ul>
         </>

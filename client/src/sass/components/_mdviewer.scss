@@ -19,8 +19,22 @@
         }
     }
     
-    &__preview{
-        height:40vh;
-        overflow:auto;
+    &__preview {
+        height: 40vh;
+        overflow: auto;
+        &--full {
+            height: 80vh;
+        }
+
+        @media print {
+            height: auto;
+            overflow: visible;
+            columns: 2;
+            column-gap: 1in;
+            
+            p {
+                line-height: 2rem;
+            }
+        }
     }
 }
