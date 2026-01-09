@@ -13,6 +13,8 @@ services:
     environment:
       BASEDOCDIR: "/usr/app/client/public/writing_docs/"
       BASEPICDIR: "/usr/app/client/public/pics/"
+      BASEMDDIR: "/usr/app/client/public/writing_docs/"
+      BASEMEALSDIR: "/usr/app/client/src/jsonfiles/"
 volumes:
   pictures:
     driver: local

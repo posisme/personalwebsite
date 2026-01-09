@@ -217,6 +217,6 @@ app.post('/logout', (req, res) => {
     });
 });
 
-app.listen(6125, () => {
-    console.log(`running on port 6125...`);
+app.listen(process.env.SERVER_PORT || 6125, () => {
+    console.log(`running on port ${process.env.SERVER_PORT || 6125}...`);
 });
